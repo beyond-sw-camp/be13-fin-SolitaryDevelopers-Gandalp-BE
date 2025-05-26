@@ -1,7 +1,11 @@
 package com.gandalp.gandalp.member;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.gandalp.gandalp.member.domain.dto.NurseNameEmailDto;
+import com.gandalp.gandalp.member.domain.entity.Nurse;
+import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -45,9 +49,12 @@ public class NurseController {
 
     private final NurseService nurseService;
     private final HeadNurseService headNurseService;
+    private final ScheduleService scheduleService;
     private final AuthService authService;
     private final SimpMessagingTemplate messagingTemplate;
     private final WebSocketService webSocketService;
+
+    private final NurseRepository nurseRepository;
 
     // 간호사 생성
     @Operation(summary = "간호사 생성", description = "수간호사가 새로운 간호사를 생성합니다.")
@@ -98,23 +105,23 @@ public class NurseController {
     }
 
     // 간호사 단 건 조회
-   @GetMapping("/{nurseId}")
-   @PreAuthorize("hasPermission(#nurseId, 'NURSE_ACCESS')")
-   public ResponseEntity<NurseResponseDto> getOneNurse(@PathVariable Long nurseId){
+    @GetMapping("/{nurseId}")
+    @PreAuthorize("hasPermission(#nurseId, 'NURSE_ACCESS')")
+    public ResponseEntity<NurseResponseDto> getOneNurse(@PathVariable Long nurseId){
 
-       NurseResponseDto responseDto = headNurseService.getOneNurse(nurseId);
+        NurseResponseDto responseDto = headNurseService.getOneNurse(nurseId);
 
-       return ResponseEntity.ok(responseDto);
-   }
+        return ResponseEntity.ok(responseDto);
+    }
 
     //간호사 전체 조회
     @Operation(summary = "간호사 전체 조회", description = "수간호사가 소속된 부서의 간호사들을 조회합니다.")
     @GetMapping
     @PreAuthorize("hasRole('HEAD_NURSE')")
     public ResponseEntity<?> getAllNurses(
-        @RequestParam(required = false) String keyword,
-        @RequestParam(required = false) NurseSearchOption searchOption, // 검색 옵션
-        @PageableDefault(size = 10, page = 0) Pageable pageable) {
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) NurseSearchOption searchOption, // 검색 옵션
+            @PageableDefault(size = 10, page = 0) Pageable pageable) {
         Page<NurseResponseDto> allNurses = null;
 
         try{
@@ -179,7 +186,7 @@ public class NurseController {
     @Operation(summary = "간호사 현재 상태 수정", description = "간호사 계정으로 로그인한 해당 과의 간호사가 자신의 상태를 수정 가능")
     @PostMapping("/status")
     public ResponseEntity<?> updateNurseStatus(
-        @RequestBody NurseStatusUpdateDto request) {
+            @RequestBody NurseStatusUpdateDto request) {
         NurseCurrentStatusDto nurseStatus = null;
 
         try {
@@ -197,6 +204,14 @@ public class NurseController {
         return ResponseEntity.ok(nurseStatus);
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<List<NurseNameEmailDto>> getNurseNames() {
+        List<Nurse> nurses = nurseRepository.findAll();
+        List<NurseNameEmailDto> result = nurses.stream()
+                .map(n -> new NurseNameEmailDto(n.getId(), n.getName(), n.getEmail()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
+    }
 
 
 

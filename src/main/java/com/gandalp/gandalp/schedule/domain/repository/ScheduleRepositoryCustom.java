@@ -16,7 +16,6 @@ public interface ScheduleRepositoryCustom {
 	StaticsResponseDto getNursesWorkingStatistics(Nurse nurse, SelectOption selectOption,  int year, int month, Integer quarter );
 
 
-
 }
 
 

@@ -38,6 +38,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final com.gandalp.gandalp.member.domain.entity.QMember member;
 
+    public final com.gandalp.gandalp.member.domain.entity.QNurse nurse;
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
@@ -64,6 +66,7 @@ public class QComment extends EntityPathBase<Comment> {
         super(type, metadata, inits);
         this.board = inits.isInitialized("board") ? new QBoard(forProperty("board"), inits.get("board")) : null;
         this.member = inits.isInitialized("member") ? new com.gandalp.gandalp.member.domain.entity.QMember(forProperty("member"), inits.get("member")) : null;
+        this.nurse = inits.isInitialized("nurse") ? new com.gandalp.gandalp.member.domain.entity.QNurse(forProperty("nurse"), inits.get("nurse")) : null;
     }
 
 }

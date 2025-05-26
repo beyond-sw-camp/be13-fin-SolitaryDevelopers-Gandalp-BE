@@ -20,5 +20,6 @@ public class CommentUpdateDto {
     @NotNull
     private String content;
 
+    private Long nurseId;
 
 }

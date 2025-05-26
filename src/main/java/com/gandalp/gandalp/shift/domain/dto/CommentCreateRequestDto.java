@@ -10,9 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentCreateRequestDto {
 
+    @NotNull
     private Long boardId;
 
     @NotNull
     private String content;
+
+    private Long nurseId;
 
 }

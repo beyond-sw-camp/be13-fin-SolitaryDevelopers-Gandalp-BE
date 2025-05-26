@@ -14,5 +14,7 @@ public class ShiftCreateRequestDto {
     @NotNull
     private String content;
 
+    private Long nurseId;
+
 
 }

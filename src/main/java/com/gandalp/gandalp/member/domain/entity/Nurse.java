@@ -66,4 +66,6 @@ public class Nurse extends BaseEntity {
 	public void updateWorkingStatus(Status workingStatus) {
 		this.workingStatus = workingStatus;
 	}
+
+
 }

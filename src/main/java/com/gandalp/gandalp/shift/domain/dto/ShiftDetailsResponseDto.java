@@ -25,4 +25,6 @@ public class ShiftDetailsResponseDto {
 
     @NotNull
     List<CommentResponseDto> comments;
+
+    private Long nurseId;
 }

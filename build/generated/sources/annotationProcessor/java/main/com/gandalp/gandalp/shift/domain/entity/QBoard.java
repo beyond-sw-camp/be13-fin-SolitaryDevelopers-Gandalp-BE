@@ -42,6 +42,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final com.gandalp.gandalp.member.domain.entity.QMember member;
 
+    public final com.gandalp.gandalp.member.domain.entity.QNurse nurse;
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
@@ -68,6 +70,7 @@ public class QBoard extends EntityPathBase<Board> {
         super(type, metadata, inits);
         this.department = inits.isInitialized("department") ? new com.gandalp.gandalp.hospital.domain.entity.QDepartment(forProperty("department"), inits.get("department")) : null;
         this.member = inits.isInitialized("member") ? new com.gandalp.gandalp.member.domain.entity.QMember(forProperty("member"), inits.get("member")) : null;
+        this.nurse = inits.isInitialized("nurse") ? new com.gandalp.gandalp.member.domain.entity.QNurse(forProperty("nurse"), inits.get("nurse")) : null;
     }
 
 }

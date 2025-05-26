@@ -4,6 +4,7 @@ import com.gandalp.gandalp.auth.model.service.AuthService;
 import com.gandalp.gandalp.common.entity.CommonCode;
 import com.gandalp.gandalp.common.repository.CommonCodeRepository;
 import com.gandalp.gandalp.hospital.domain.entity.Department;
+import com.gandalp.gandalp.mail.MailService;
 import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
@@ -50,6 +51,7 @@ public class ShiftServiceImpl implements ShiftService {
     private final AuthService authService;
     private final ScheduleRepository scheduleRepository;
     private final ScheduleValidator scheduleValidator;
+    private final MailService mailService;
 
 
     // 교대 요청 댓글 채택
@@ -95,6 +97,8 @@ public class ShiftServiceImpl implements ShiftService {
         // 6. 게시글 상태 변경
         board.completeRequest();
         shiftRepository.save(board);
+
+        mailService.sendSimpleMailMessage(boardNurse, commentNurse);
     }
 
 //    @Transactional

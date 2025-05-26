@@ -128,11 +128,11 @@ public class HospitalService {
     // 검색을 하는 경우 주소, 병원 이름
     public Page<HospitalDto> getNearestHospitals(double longitude, double latitude, String keyword, SortOption sortOption, Pageable pageable) {
 
-
+        System.out.println("long "+ longitude+ " lan = "+ latitude);
 
             // 1) Redis Geo에서 반경 제한 없이 최단거리 후보 ID(최대 50개 정도 여유 있게) 조회
             List<Long> candidateIds = hospitalGeoRedisRepository.findNearbyHospitalIds(latitude, longitude, 50);
-
+            System.out.println("redis list : "+ candidateIds);
             // 만약 후보가 없다면 빈 페이지 반환
             if (candidateIds.isEmpty()) {
                 throw new EntityNotFoundException("주변 병원이 없습니다.");
@@ -142,6 +142,7 @@ public class HospitalService {
             // 위에서 후보로 조회한 각 병원 ID에 대해 Redis에 저장한 위·경도 정보를 한꺼번에 조회
             List<Point> points = hospitalGeoRedisRepository.findLocationsByIds(candidateIds);
 
+            System.out.println("points : "+ points);
 
             // 3) Point 리스트를 네이버 Direction API용 DTO로 변환
             List<DestinationDto> destinations = IntStream.range(0, candidateIds.size())
@@ -152,12 +153,16 @@ public class HospitalService {
                     ))
                     .collect(Collectors.toList());
             // 반환 예시: { hospitalId1 → 1.2km, hospitalId2 → 0.9km, … }
+            System.out.println("destinations : "+ destinations);
 
             // 4) 네이버 Direction API 호출 (service=15, batch size 최대 25)
             Map<Long, Double> roadDistances = naverDirectionClient.getRoadDistances(
                     latitude, longitude,
                     destinations
             );
+
+            System.out.println("roadDistances : "+ roadDistances.toString());
+
 
             // 5) 거리 순 정렬 후 상위 20개 ID 뽑기
             List<Long> top20Ids = roadDistances.entrySet().stream()
@@ -166,6 +171,7 @@ public class HospitalService {
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
 
+            System.out.println(top20Ids.toString());
             // 6) 최종적으로 거리/검색/정렬 조건을 적용해 JPA로 조회
 
             Page<HospitalDto> page = hospitalRepository.searchNearbyHospitals(top20Ids, keyword, sortOption, pageable);

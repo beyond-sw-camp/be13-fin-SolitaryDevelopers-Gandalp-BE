@@ -1,61 +1,65 @@
 package com.gandalp.gandalp.hospital.domain.service;
 
-import com.gandalp.gandalp.hospital.domain.dto.DestinationDto;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.gandalp.gandalp.hospital.domain.dto.DestinationDto;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class NaverDirectionClient {
 
-
     private final DirectionCacheService cacheService;
 
-    // 25개씩 잘라서 direction 15 서비스 호출
+    /**
+     * 현재 위치로부터 목적지 병원들까지의 도로 거리(km)를 계산한다.
+     * 실패 시 해당 병원은 결과에서 제외된다.
+     *
+     * @param latitude     현재 위치 위도
+     * @param longitude    현재 위치 경도
+     * @param destinations 병원 리스트 (병원 ID + 위도/경도 정보 포함)
+     * @return 병원 ID → 거리(km) 매핑
+     */
     public Map<Long, Double> getRoadDistances(
-            double latitude, double longitude,
-            List<DestinationDto> destinations
+        double latitude, double longitude,
+        List<DestinationDto> destinations
     ) {
+        log.info("🚗 도로 거리 계산 시작 - 기준점: ({}, {}), 대상 병원 수: {}", latitude, longitude, destinations.size());
 
         Map<Long, Double> distances = new HashMap<>();
         final int BATCH = 25;
 
-        for (int i = 0 ; i < destinations.size(); i += BATCH) {
+        for (int i = 0; i < destinations.size(); i += BATCH) {
             int end = Math.min(i + BATCH, destinations.size());
+            List<DestinationDto> batch = destinations.subList(i, end);
 
-            for (int j = i ; j < end ; j ++){
-                DestinationDto dest = destinations.get(j);
-                double km = cacheService.getDistanceForPair(latitude, longitude, dest);
+            for (DestinationDto dest : batch) {
+                try {
+                    double km = cacheService.getDistanceForPair(latitude, longitude, dest);
 
-                if(km != Double.MAX_VALUE) {
-                    distances.put(dest.getHospitalId(), km);
+                    if (km != Double.MAX_VALUE) {
+                        distances.put(dest.getHospitalId(), km);
+                        log.debug("✅ 거리 계산 성공 - 병원 ID: {}, 거리: {}km", dest.getHospitalId(), km);
+                    } else {
+                        log.warn("❌ 거리 계산 실패 (Double.MAX_VALUE) - 병원 ID: {}, 좌표: ({}, {})",
+                            dest.getHospitalId(), dest.getLatitude(), dest.getLongitude());
+                    }
+
+                } catch (Exception e) {
+                    log.error("💥 거리 계산 중 예외 발생 - 병원 ID: {}, 좌표: ({}, {})",
+                        dest.getHospitalId(), dest.getLatitude(), dest.getLongitude(), e);
                 }
             }
         }
 
+        log.info("🚗 도로 거리 계산 완료 - 성공 병원 수: {}", distances.size());
         return distances;
-
     }
 }
-
-
-
-

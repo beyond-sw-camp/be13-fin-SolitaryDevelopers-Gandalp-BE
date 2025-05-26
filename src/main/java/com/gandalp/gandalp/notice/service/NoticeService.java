@@ -59,9 +59,18 @@ public class NoticeService {
 	@Transactional
 	public void deleteNotice(Long noticeId){
 
+		Member loginMember = authService.getLoginMember();
+
+		// 1. DB에 공지사항 존재하는지 검증하기
 		Notice notice = noticeRepository.findById(noticeId).orElseThrow(
-			() -> new EntityNotFoundException("해당 공지사항은 존재하지 않습니다.")
+			() -> new IllegalArgumentException("해당 공지사항은 존재하지 않습니다.")
 		);
+
+		// 2. 해당 간호사가 긴급 공지사항을 작성한 간호사인지 검증
+		String writer = notice.getCreatedBy();
+		if (!writer.equals(loginMember.getAccountId())){
+			throw new IllegalArgumentException("본인이 작성한 공지사항이 아닙니다.");
+		}
 
 		noticeRepository.delete(notice);
 	}

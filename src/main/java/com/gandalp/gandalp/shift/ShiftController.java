@@ -3,8 +3,6 @@ package com.gandalp.gandalp.shift;
 import com.gandalp.gandalp.shift.domain.dto.ShiftCreateRequestDto;
 import com.gandalp.gandalp.shift.domain.dto.ShiftDetailsResponseDto;
 import com.gandalp.gandalp.shift.domain.dto.ShiftResponseDto;
-import com.gandalp.gandalp.shift.domain.dto.ShiftUpdateDto;
-import com.gandalp.gandalp.shift.domain.entity.Board;
 import com.gandalp.gandalp.shift.domain.entity.SearchOption;
 import com.gandalp.gandalp.shift.domain.service.ShiftService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,11 +19,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -36,20 +35,20 @@ public class ShiftController {
     private final ShiftService shiftService;
 
     // 교대 요청 댓글 채택
-//    @Operation(summary = "교대 요청 댓글이 채택")
-//    @PostMapping("comments/{comment-id}/submit")
-//    public ResponseEntity<?> submitComment(@PathVariable("comment-id") Long commentId,
-//                                            @RequestParam Long boardId) {
-//        try {
-//            shiftService.submitComment(commentId); // 내부에서 트랜잭션 처리
-//            return ResponseEntity.ok("교대 요청이 완료되었습니다.");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+    @Operation(summary = "교대 요청 댓글이 채택")
+    @PostMapping("comments/{comment-id}/submit")
+    public ResponseEntity<?> submitComment(@PathVariable("comment-id") Long commentId,
+                                            @RequestParam Long boardId) {
+        try {
+            shiftService.submitComment(commentId); // 내부에서 트랜잭션 처리
+            return ResponseEntity.ok("교대 요청이 완료되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
-    // 교대 글 C
+    // 교대 요청 글 C
     @Operation(summary = "교대 요청 글 등록", description = "교대 요청 글 등록")
     @PostMapping("/create")
     public ResponseEntity<?> createShift(
@@ -63,7 +62,7 @@ public class ShiftController {
         }
     }
 
-    // 교대 글 R
+    // 교대 요청 글 R
 
     @Operation(summary = "교대 요청 글 검색 & 조회", description = "교대 요청 글 검색 & 조회")
     @GetMapping("/search")
@@ -106,36 +105,30 @@ public class ShiftController {
     }
 
 
-
-    // 교대 글 U
-    @Operation(summary = "교대 요청 글 수정", description = "교대 요청 글 수정")
-    @PutMapping("/{board-id}")
-    public ResponseEntity<?> updateShift(@RequestBody @Valid ShiftUpdateDto shiftUpdateDto ){
-
-        try {
-            ShiftResponseDto shiftResponseDto = shiftService.updateShift(shiftUpdateDto);
-
-            return ResponseEntity.ok().body(shiftResponseDto);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-
-
     // 교대 글 D
     @Operation(summary = "교대 요청 글 삭제", description = "교대 요청 글 삭제")
     @DeleteMapping("/{board-id}")
-    public ResponseEntity<?> deleteShift(@PathVariable("board-id") Long boardId) {
-
+    public ResponseEntity<?> deleteShift(@PathVariable("board-id") Long boardId, @RequestBody Map<String, Long> body) {
         try {
-            shiftService.deleteShift(boardId);
-            //얍
-
-//            return ResponseEntity.status(HttpStatus.OK).body("교대 요청 글이 삭제되었습니다.");
+            Long nurseId = body.get("nurseId");
+            shiftService.deleteShift(boardId, nurseId);
             return ResponseEntity.ok().body("교대 요청 글이 삭제되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
+//    @DeleteMapping("/{board-id}")
+//    public ResponseEntity<?> deleteShift(@PathVariable("board-id") Long boardId, Long nurseId) {
+//
+//        try {
+//            shiftService.deleteShift(boardId, nurseId);
+//
+////            return ResponseEntity.status(HttpStatus.OK).body("교대 요청 글이 삭제되었습니다.");
+//            return ResponseEntity.ok().body("교대 요청 글이 삭제되었습니다.");
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 }

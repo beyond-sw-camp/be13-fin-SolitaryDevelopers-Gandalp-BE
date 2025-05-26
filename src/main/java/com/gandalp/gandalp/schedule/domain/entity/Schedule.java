@@ -65,4 +65,8 @@ public class Schedule extends BaseEntity {
 		this.startTime = personalScheduleUpdateRequestDto.getStartTime();
 		this.endTime = personalScheduleUpdateRequestDto.getEndTime();
 	}
+
+	public void setNurse(Nurse nurse) {
+		this.nurse = nurse;
+	}
 }

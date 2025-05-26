@@ -1,15 +1,18 @@
 package com.gandalp.gandalp.schedule;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import com.gandalp.gandalp.schedule.domain.dto.*;
 import com.gandalp.gandalp.schedule.domain.entity.Schedule;
+import com.gandalp.gandalp.schedule.domain.repository.ScheduleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
     private final SurgeryScheduleService surgeryScheduleService;
     private final NurseStaticsService nurseStaticsService;
+    private final ScheduleRepository scheduleRepository;
 
     @Operation(summary = "오프 생성")
     @PostMapping("/off")
@@ -297,5 +301,19 @@ public class ScheduleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> existsSchedule(
+            @RequestParam Long nurseId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime
+    ) {
+        // 데이: 6~14, 이브닝: 14~22, 나이트: 22~06
+        // startTime이 포함되는 일정이 있는지 확인
+        boolean exists = scheduleRepository.existsByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
+                nurseId, startTime, startTime
+        );
+        return ResponseEntity.ok(exists);
+    }
+
 
 }

@@ -3,7 +3,7 @@ package com.gandalp.gandalp.shift.domain.entity;
 import com.gandalp.gandalp.common.entity.BaseEntity;
 import com.gandalp.gandalp.hospital.domain.entity.Department;
 import com.gandalp.gandalp.member.domain.entity.Member;
-import com.gandalp.gandalp.shift.domain.dto.ShiftUpdateDto;
+import com.gandalp.gandalp.member.domain.entity.Nurse;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,18 +54,33 @@ public class Board extends BaseEntity{
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> comments = new ArrayList<>();
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nurse-id")
+	private Nurse nurse;
 
-	@Builder
-	public Board(ShiftUpdateDto shiftUpdateDto, Member member, Department department) {
-		this.content = shiftUpdateDto.getContent();
-		this.member = member;
-		this.department = department;
 
+	// 채택할 때 boardstatus 값 변경
+	public void completeRequest() {
+		this.boardStatus = BoardStatus.Completed;
 	}
 
 
-	public void update(String content) {
-		this.content = content;
-	}
+
+
+//	@Builder
+//	public Board(ShiftUpdateDto shiftUpdateDto, Member member, Department department) {
+//		this.content = shiftUpdateDto.getContent();
+//		this.member = member;
+//		this.department = department;
+//
+//	}
+
+
+//	public void update(String content) {
+//		this.content = content;
+//	}
+
+
+
 
 }

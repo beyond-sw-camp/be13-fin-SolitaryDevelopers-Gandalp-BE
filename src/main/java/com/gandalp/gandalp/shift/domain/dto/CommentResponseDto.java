@@ -28,6 +28,8 @@ public class CommentResponseDto {
 
     private String updatedBy;
 
+    private Long nurseId;
+
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
@@ -38,12 +40,14 @@ public class CommentResponseDto {
         this.boardId = comment.getBoard() != null ? comment.getBoard().getId() : null;
         this.updatedAt = comment.getUpdatedAt();
         this.updatedBy = comment.getUpdatedBy();
+        this.nurseId = comment.getNurse() != null ? comment.getNurse().getId() : null;
     }
 
     public CommentResponseDto(Long commentId, String content, LocalDateTime createdAt) {
         this.commentId = commentId;
         this.content = content;
         this.createdAt = createdAt;
+
     }
 
 }

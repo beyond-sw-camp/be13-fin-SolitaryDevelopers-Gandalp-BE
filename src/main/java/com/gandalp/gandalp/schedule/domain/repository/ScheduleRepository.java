@@ -48,4 +48,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
             "WHERE s.nurse.id = :nurseId")
     List<Schedule> findByNurseId(@Param("nurseId") Long nurseId);
 
+    // 일정 존재 여부
+    boolean existsByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(Long nurseId, LocalDateTime start, LocalDateTime end);
+
+    // 특정 시간에 해당 nurse가 담당하는 schedule을 하나만 반환하는 메서드
+    Optional<Schedule> findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(Long nurseId, LocalDateTime start, LocalDateTime end);
+
 }

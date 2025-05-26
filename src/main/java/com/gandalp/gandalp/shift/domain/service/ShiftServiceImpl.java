@@ -4,19 +4,16 @@ import com.gandalp.gandalp.auth.model.service.AuthService;
 import com.gandalp.gandalp.common.entity.CommonCode;
 import com.gandalp.gandalp.common.repository.CommonCodeRepository;
 import com.gandalp.gandalp.hospital.domain.entity.Department;
-import com.gandalp.gandalp.hospital.domain.repository.DepartmentRepository;
-import com.gandalp.gandalp.member.domain.dto.NurseResponseDto;
 import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
-import com.gandalp.gandalp.member.domain.repository.MemberRepository;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.schedule.domain.entity.Schedule;
 import com.gandalp.gandalp.schedule.domain.repository.ScheduleRepository;
+import com.gandalp.gandalp.shift.ScheduleValidator;
 import com.gandalp.gandalp.shift.domain.dto.CommentResponseDto;
 import com.gandalp.gandalp.shift.domain.dto.ShiftCreateRequestDto;
 import com.gandalp.gandalp.shift.domain.dto.ShiftDetailsResponseDto;
 import com.gandalp.gandalp.shift.domain.dto.ShiftResponseDto;
-import com.gandalp.gandalp.shift.domain.dto.ShiftUpdateDto;
 import com.gandalp.gandalp.shift.domain.entity.Board;
 import com.gandalp.gandalp.shift.domain.entity.BoardStatus;
 import com.gandalp.gandalp.shift.domain.entity.Comment;
@@ -51,42 +48,75 @@ public class ShiftServiceImpl implements ShiftService {
 
     private final CommentRepository commentRepository;
     private final AuthService authService;
+    private final ScheduleRepository scheduleRepository;
+    private final ScheduleValidator scheduleValidator;
 
 
-//    // 교대 요청 댓글 채택
-//    @Override
+    // 교대 요청 댓글 채택
+    @Override
+    @Transactional
+    public void submitComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        Board board = comment.getBoard();
+        if (board == null) {
+            throw new IllegalArgumentException("댓글에 해당하는 게시글이 없습니다.");
+        }
+        if (board.getBoardStatus() == BoardStatus.Completed) {
+            throw new IllegalStateException("이 게시물은 이미 채택된 상태입니다.");
+        }
+
+        // 1. 게시글 nurse와 댓글 nurse
+        Nurse boardNurse = board.getNurse();
+        Nurse commentNurse = comment.getNurse();
+
+        // 2. 게시글의 일정 찾기 (board.content 파싱)
+        ScheduleValidator.ParsedShift boardShift = scheduleValidator.parseContentToShiftTime(board.getContent());
+        Schedule boardSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
+                boardNurse.getId(), boardShift.startTime, boardShift.startTime
+        ).orElseThrow(() -> new RuntimeException("게시글 작성자의 일정이 없습니다."));
+
+        // 3. 댓글의 일정 찾기 (comment.content 파싱)
+        ScheduleValidator.ParsedShift commentShift = scheduleValidator.parseContentToShiftTime(comment.getContent());
+        Schedule commentSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
+                commentNurse.getId(), commentShift.startTime, commentShift.startTime
+        ).orElseThrow(() -> new RuntimeException("댓글 작성자의 일정이 없습니다."));
+
+        // 4. swap: nurse만 서로 교환
+        Nurse temp = boardSchedule.getNurse();
+        boardSchedule.setNurse(commentSchedule.getNurse());
+        commentSchedule.setNurse(temp);
+
+        // 5. 저장
+        scheduleRepository.save(boardSchedule);
+        scheduleRepository.save(commentSchedule);
+
+        // 6. 게시글 상태 변경
+        board.completeRequest();
+        shiftRepository.save(board);
+    }
+
 //    @Transactional
 //    public void submitComment(Long commentId) {
+//    Comment comment = commentRepository.findById(commentId)
+//            .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 //
+//    Board board = comment.getBoard();
+//    if (board == null) {
+//        throw new IllegalArgumentException("댓글에 해당하는 게시글이 없습니다.");
+//    }
 //
+//    // 이미 채택된 게시글이면 예외 발생
+//    if (board.getBoardStatus() == BoardStatus.Completed) {
+//        throw new IllegalStateException("이 게시물은 이미 채택된 상태입니다.");
+//    }
+//
+//    board.completeRequest(); // Setter 대신 명시적 메서드 사용
+//    shiftRepository.save(board);
 //
 //    }
 
-    //        // 4. 일정(Schedule)에서 nurseId 서로 교환
-//        // 예시: 게시글의 일정과 댓글 작성자의 일정이 같은 날짜/시간대에 있다고 가정
-//        Long boardScheduleId = board.getScheduleId(); // 예시: Board에 scheduleId 필드가 있다고 가정
-//        Long commentScheduleId = comment.getScheduleId(); // 예시: Comment에 scheduleId 필드가 있다고 가정
-//
-//        Schedule boardSchedule = scheduleRepository.findById(boardScheduleId)
-//                .orElseThrow(() -> new IllegalArgumentException("게시글의 일정을 찾을 수 없습니다."));
-//        Schedule commentSchedule = scheduleRepository.findById(commentScheduleId)
-//                .orElseThrow(() -> new IllegalArgumentException("댓글 작성자의 일정을 찾을 수 없습니다."));
-//
-//        // nurseId 서로 교환
-//        Long tempNurseId = boardSchedule.getNurseId();
-//        boardSchedule.setNurseId(commentSchedule.getNurseId());
-//        commentSchedule.setNurseId(tempNurseId);
-//
-//        // 5. 저장 (JPA의 경우 @Transactional이면 자동 flush)
-//        // 명시적으로 저장하고 싶으면 아래처럼
-//        scheduleRepository.save(boardSchedule);
-//        scheduleRepository.save(commentSchedule);
-//        // board의 상태도 저장
-//        shiftRepository.save(board);
-//
-//        // 필요하다면 댓글에 "채택됨" 표시 등 추가
-//        comment.setSelected(true);
-//        commentRepository.save(comment);
 
     // 공통 코드 변환 메서드
     private ShiftResponseDto toDto(Board board) {
@@ -101,41 +131,76 @@ public class ShiftServiceImpl implements ShiftService {
         return dto;
     }
 
-    //
     
 
     // 교대 요청 글 C
     @Override
     public ShiftResponseDto createShift(ShiftCreateRequestDto shiftCreateRequestDto) {
 
+
         Member member = authService.getLoginMember();
         Department department = member.getDepartment();
-
         List<Comment> comments = new ArrayList<>();
 
-        // DTO -> entity 로 변환
-        // createAt = 입력한 memberid의 회원의 accountid
+        Nurse nurse = nurseRepository.findById(shiftCreateRequestDto.getNurseId())
+                .orElseThrow(() -> new RuntimeException("간호사를 찾을 수 없습니다."));
+
+        ScheduleValidator.ParsedShift parsed = scheduleValidator.parseContentToShiftTime(shiftCreateRequestDto.getContent());
+        if (!scheduleValidator.existsScheduleForNurse(shiftCreateRequestDto.getNurseId(), parsed.startTime)) {
+            throw new RuntimeException("해당 시간에 근무 일정이 없습니다.");
+        }
+
+        // 3. 게시글 생성
         Board board = Board.builder()
                 .content(shiftCreateRequestDto.getContent())
                 .boardStatus(BoardStatus.Waiting)
                 .comments(comments)
                 .department(department)
                 .member(member)
+                .nurse(nurse)
                 .build();
-
-        // repository 에 entity 저장
         shiftRepository.save(board);
 
         Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("board_status", String.valueOf(board.getBoardStatus()));
-
-        if(codeLabel.isEmpty()) {
+        if (codeLabel.isEmpty()) {
             throw new RuntimeException("codeLabel is empty");
         }
-
-        // entity -> responseDto 로 변환 후 반환
-        return new ShiftResponseDto(board,codeLabel.get());
-
+        return new ShiftResponseDto(board, codeLabel.get());
     }
+
+
+//    @Override
+//    public ShiftResponseDto createShift(ShiftCreateRequestDto shiftCreateRequestDto) {
+//
+//        Member member = authService.getLoginMember();
+//        Department department = member.getDepartment();
+//
+//        List<Comment> comments = new ArrayList<>();
+//
+//        Nurse nurse = nurseRepository.findById(shiftCreateRequestDto.getNurseId())
+//                .orElseThrow(() -> new RuntimeException("간호사를 찾을 수 없습니다."));
+//
+//        Board board = Board.builder()
+//                .content(shiftCreateRequestDto.getContent())
+//                .boardStatus(BoardStatus.Waiting)
+//                .comments(comments)
+//                .department(department)
+//                .member(member)
+//                .nurse(nurse)
+//                .build();
+//        shiftRepository.save(board);
+//
+//        Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("board_status", String.valueOf(board.getBoardStatus()));
+//
+//        if(codeLabel.isEmpty()) {
+//            throw new RuntimeException("codeLabel is empty");
+//        }
+//
+//        // entity -> responseDto 로 변환 후 반환
+//        return new ShiftResponseDto(board,codeLabel.get());
+//
+//    }
+
 
     // 교대 요청 글 R
 
@@ -195,45 +260,42 @@ public class ShiftServiceImpl implements ShiftService {
                 board.getId(),
                 board.getContent(),
                 codeLabel.get(),
-                commentDtos
+                commentDtos,
+                board.getNurse() != null ? board.getNurse().getId() : null
         );
     }
 
 
     // 교대 요청 글 U
-    @Override
-    public ShiftResponseDto updateShift(ShiftUpdateDto shiftUpdateDto) {
-
-        Long boardId = shiftUpdateDto.getBoardId();
-        Board board = shiftRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
-
-        board.update(shiftUpdateDto.getContent());
-
-        Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("board_status", String.valueOf(board.getBoardStatus()));
-
-        if(codeLabel.isEmpty()) {
-            throw new RuntimeException("codeLabel is empty");
-        }
-
-        return new ShiftResponseDto(board,codeLabel.get());
-    }
+//    @Override
+//    public ShiftResponseDto updateShift(ShiftUpdateDto shiftUpdateDto) {
+//
+//        Long boardId = shiftUpdateDto.getBoardId();
+//        Board board = shiftRepository.findById(boardId).orElseThrow(
+//                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+//        );
+//
+//        board.update(shiftUpdateDto.getContent());
+//
+//        Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("board_status", String.valueOf(board.getBoardStatus()));
+//
+//        if(codeLabel.isEmpty()) {
+//            throw new RuntimeException("codeLabel is empty");
+//        }
+//
+//        return new ShiftResponseDto(board,codeLabel.get());
+//    }
 
     // 교대 요청 글 D
     @Override
-    public void deleteShift(Long boardId) {
-
-
-        if(!shiftRepository.existsById(boardId)) {
-            throw new RuntimeException("board is empty");
+    public void deleteShift(Long boardId, Long nurseId) {
+        Board board = shiftRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("board is empty"));
+        if (!board.getNurse().getId().equals(nurseId)) {
+            throw new RuntimeException("정보가 일치하지 않습니다.");
         }
-
-
         shiftRepository.deleteById(boardId);
     }
-
-
 
 }
 

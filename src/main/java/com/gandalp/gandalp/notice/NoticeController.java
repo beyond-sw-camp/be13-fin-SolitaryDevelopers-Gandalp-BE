@@ -47,13 +47,12 @@ public class NoticeController {
 	}
 
 
-	@Operation(summary = "공지사항 삭제", description = "수간호사는 본인이 작성한 긴급 공지사항을 삭제할 수 있다.")
+	@Operation(summary = "긴급 공지사항 삭제", description = "수간호사는 본인이 작성한 긴급 공지사항을 삭제할 수 있다.")
 	@DeleteMapping
 	@PreAuthorize("hasRole('HEAD_NURSE')")
 	public ResponseEntity<?> deleteNotice(Long noticeId){
 
 		try{
-
 			noticeService.deleteNotice(noticeId);
 
 		} catch (Exception e) {

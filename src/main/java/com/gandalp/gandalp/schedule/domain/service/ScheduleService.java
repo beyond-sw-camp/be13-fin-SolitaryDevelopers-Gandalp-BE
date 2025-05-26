@@ -9,6 +9,9 @@ import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.entity.NurseStatistics;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.member.domain.repository.NurseStatisticsRepository;
+import com.gandalp.gandalp.notice.entity.Notice;
+import com.gandalp.gandalp.notice.entity.NoticeCategory;
+import com.gandalp.gandalp.notice.repository.NoticeRepository;
 import com.gandalp.gandalp.schedule.domain.dto.*;
 import com.gandalp.gandalp.schedule.domain.entity.Category;
 import com.gandalp.gandalp.schedule.domain.entity.Schedule;
@@ -48,6 +51,7 @@ public class ScheduleService {
     private final SurgeryScheduleRepository surgeryScheduleRepository;
     private final NurseStatisticsRepository nurseStatisticsRepository;
     private final AuthService authService;
+    private final NoticeRepository noticeRepository;
 
     public OffScheduleTempResponseDto createOffSchecule(OffScheduleRequestDto scheduleRequestDto) {
         Optional<Nurse> nurseOpt = nurseRepository.findByEmail(scheduleRequestDto.getEmail());
@@ -570,6 +574,8 @@ public class ScheduleService {
                 .endTime(workTemp.get().getEndTime())
                 .build();
 
+
+
         try {
             scheduleRepository.save(work);
 
@@ -588,6 +594,17 @@ public class ScheduleService {
                     .endTime(work.getEndTime())
                     .updatedAt(workTemp.get().getUpdatedAt())
                     .build();
+
+            ///  일반 공지사항에 추가됨
+            int monthValue = workTemp.get().getStartTime().getMonthValue();
+
+            Notice notice = Notice.builder()
+                .category(NoticeCategory.GENERAL)
+                .department(workTemp.get().getNurse().getDepartment())
+                .content(String.format("%d월 근무 생성", monthValue))
+                .build();
+
+            noticeRepository.save(notice);
 
             return scheduleResponseDto;
 

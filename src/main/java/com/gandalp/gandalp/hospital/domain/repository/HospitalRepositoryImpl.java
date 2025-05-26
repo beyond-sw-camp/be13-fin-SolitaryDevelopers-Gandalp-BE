@@ -34,18 +34,20 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
 
         BooleanBuilder search = new BooleanBuilder();
 
+
+        if (keyword != null && !keyword.isBlank()) {
+            search.and(
+                    hospital.name.containsIgnoreCase(keyword)
+                            .or(hospital.address.containsIgnoreCase(keyword))
+            );
+        }
+
         // hospitalIds가 null/빈 리스트가 아닐 때만 IN 조건 추가
-        if (hospitalIds != null && !hospitalIds.isEmpty()) {
+        else if (hospitalIds != null && !hospitalIds.isEmpty()) {
             search.and(hospital.id.in(hospitalIds));
         }
 
-        // keyword가 null인 경우
-        if (keyword != null && !keyword.isBlank()) {
-            search.and(
-                hospital.name.containsIgnoreCase(keyword)
-                    .or(hospital.address.containsIgnoreCase(keyword))
-            );
-        }
+
 
         List<HospitalDto> content = queryFactory
                 .select(Projections.constructor(HospitalDto.class,

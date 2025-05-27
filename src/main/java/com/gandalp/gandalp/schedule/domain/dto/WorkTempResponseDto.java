@@ -1,5 +1,6 @@
 package com.gandalp.gandalp.schedule.domain.dto;
 
+import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

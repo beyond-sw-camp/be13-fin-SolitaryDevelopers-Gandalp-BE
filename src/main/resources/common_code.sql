@@ -3,8 +3,9 @@ INSERT INTO common_code (sort_order, use_yn, code_group, code_label, code_value)
 -- member 그룹
 (1, 'Y', 'member', '수간호사', 'HEAD_NURSE'),
 (2, 'Y', 'member', '간호사', 'NURSE'),
-(3, 'Y', 'member', '응급요원', 'PARAMEDIC'),
-(4, 'Y', 'member', '관리자', 'ADMIN');
+(3, 'Y', 'member', '야간 전담 간호사', 'NIGHT_NURSE'),
+(4, 'Y', 'member', '응급요원', 'PARAMEDIC'),
+(5, 'Y', 'member', '관리자', 'ADMIN');
 
 -- board
 INSERT INTO common_code (sort_order, use_yn, code_group, code_label, code_value) VALUES

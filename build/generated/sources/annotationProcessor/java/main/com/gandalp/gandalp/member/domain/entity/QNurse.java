@@ -42,6 +42,8 @@ public class QNurse extends EntityPathBase<Nurse> {
 
     public final StringPath password = createString("password");
 
+    public final EnumPath<Type> type = createEnum("type", Type.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 

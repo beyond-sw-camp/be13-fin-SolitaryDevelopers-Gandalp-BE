@@ -59,6 +59,7 @@ public class HeadNurseService {
                             .department(department)
                             .name(reqDto.getName())
                             .email(reqDto.getEmail())
+                            .type(reqDto.getType())
                             .password(password)
                             .workingStatus(Status.OFF)
                             .build();

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gandalp.gandalp.auth.model.service.AuthService;
-import com.gandalp.gandalp.config.websocket.WebSocketService;
 import com.gandalp.gandalp.hospital.domain.entity.Department;
 import com.gandalp.gandalp.member.domain.dto.NurseCurrentStatusDto;
 import com.gandalp.gandalp.member.domain.dto.NurseRequestDto;
@@ -51,8 +50,6 @@ public class NurseController {
     private final HeadNurseService headNurseService;
     private final ScheduleService scheduleService;
     private final AuthService authService;
-    private final SimpMessagingTemplate messagingTemplate;
-    private final WebSocketService webSocketService;
 
     private final NurseRepository nurseRepository;
 
@@ -194,7 +191,6 @@ public class NurseController {
 
             // 모든 사용자에게 변경된 전체 리스트를 push
             List<NurseCurrentStatusDto> statusList = nurseService.getNurseStatus();
-            messagingTemplate.convertAndSend("/topic/nurse-status",statusList);
 
 
         }catch(Exception e){

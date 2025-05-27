@@ -9,9 +9,7 @@ import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.entity.NurseStatistics;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.member.domain.repository.NurseStatisticsRepository;
-import com.gandalp.gandalp.notice.entity.Notice;
-import com.gandalp.gandalp.notice.entity.NoticeCategory;
-import com.gandalp.gandalp.notice.repository.NoticeRepository;
+import com.gandalp.gandalp.openAi.ScheduleResult;
 import com.gandalp.gandalp.schedule.domain.dto.*;
 import com.gandalp.gandalp.schedule.domain.entity.Category;
 import com.gandalp.gandalp.schedule.domain.entity.Schedule;
@@ -34,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,7 +51,6 @@ public class ScheduleService {
     private final SurgeryScheduleRepository surgeryScheduleRepository;
     private final NurseStatisticsRepository nurseStatisticsRepository;
     private final AuthService authService;
-    private final NoticeRepository noticeRepository;
 
     public OffScheduleTempResponseDto createOffSchecule(OffScheduleRequestDto scheduleRequestDto) {
         Optional<Nurse> nurseOpt = nurseRepository.findByEmail(scheduleRequestDto.getEmail());
@@ -574,8 +573,6 @@ public class ScheduleService {
                 .endTime(workTemp.get().getEndTime())
                 .build();
 
-
-
         try {
             scheduleRepository.save(work);
 
@@ -595,17 +592,6 @@ public class ScheduleService {
                     .updatedAt(workTemp.get().getUpdatedAt())
                     .build();
 
-            ///  일반 공지사항에 추가됨
-            int monthValue = workTemp.get().getStartTime().getMonthValue();
-
-            Notice notice = Notice.builder()
-                .category(NoticeCategory.GENERAL)
-                .department(workTemp.get().getNurse().getDepartment())
-                .content(String.format("%d월 근무 생성", monthValue))
-                .build();
-
-            noticeRepository.save(notice);
-
             return scheduleResponseDto;
 
         } catch (Exception e) {
@@ -613,4 +599,79 @@ public class ScheduleService {
         }
 
     }
+
+    public List<WorkTempResponseDto> createWorkTemp(ScheduleResult scheduleJson) {
+        if (!scheduleJson.isSuccess()) {
+            throw new RuntimeException("유효하지 않은 근무입니다.");
+        }
+
+        List<ScheduleTemp> result = new ArrayList<>();
+
+        for (Map.Entry<String, Map<String, String>> entry : scheduleJson.getSchedule().entrySet()) {
+            String dateStr = entry.getKey(); // "2025-06-01"
+            LocalDate baseDate = LocalDate.parse(dateStr);
+            Map<String, String> shifts = entry.getValue();
+
+            for (Map.Entry<String, String> shift : shifts.entrySet()) {
+                String shiftType = shift.getKey();
+                String nurseId = shift.getValue();
+
+                Nurse nurse = nurseRepository.findByNo(nurseId)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 간호사 ID: " + nurseId));
+
+                TempCategory category = TempCategory.WORKING_TEMP;
+                LocalDateTime startTime;
+                LocalDateTime endTime;
+
+                switch (shiftType.toLowerCase()) {
+                    case "day":
+                        startTime = baseDate.atTime(6, 0);
+                        endTime = baseDate.atTime(14, 0);
+                        break;
+                    case "evening":
+                        startTime = baseDate.atTime(14, 0);
+                        endTime = baseDate.atTime(22, 0);
+                        break;
+                    case "night":
+                        startTime = baseDate.atTime(22, 0);
+                        endTime = baseDate.plusDays(1).atTime(6, 0);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("알 수 없는 근무 유형: " + shiftType);
+                }
+
+                ScheduleTemp scheduleTemp = ScheduleTemp.builder()
+                        .nurse(nurse)
+                        .category(category)
+                        .content("자동 생성된 GPT 근무 스케줄")
+                        .startTime(startTime)
+                        .endTime(endTime)
+                        .build();
+
+                result.add(scheduleTemp);
+            }
+        }
+
+        // ✅ 1. 저장
+        List<ScheduleTemp> savedList = scheduleTempRepository.saveAll(result);
+
+        // ✅ 2. DTO 변환 후 반환
+        List<WorkTempResponseDto> workTempResponseDtos = savedList.stream()
+                .map(work -> {
+                    Optional<String> codeLabel = commonCodeRepository
+                            .findCodeLabelByCodeGroupAndCodeValue("schedule_temp_category", String.valueOf(work.getCategory()));
+                    return WorkTempResponseDto.builder()
+                            .workTempId(work.getId())
+                            .nurseName(work.getNurse().getName())
+                            .codeLabel(codeLabel.get())
+                            .content(work.getContent())
+                            .startTime(work.getStartTime())
+                            .endTime(work.getEndTime())
+                            .build();
+                })
+                .toList();
+
+        return workTempResponseDtos;
+    }
+
 }

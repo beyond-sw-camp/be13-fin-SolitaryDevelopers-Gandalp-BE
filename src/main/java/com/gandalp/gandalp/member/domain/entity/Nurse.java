@@ -39,6 +39,10 @@ public class Nurse extends BaseEntity {
 	@JoinColumn(name = "department-id")
 	private Department department;
 
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Type type;
+
 	@Column(nullable = false, length = 50)
 	private String name;
 

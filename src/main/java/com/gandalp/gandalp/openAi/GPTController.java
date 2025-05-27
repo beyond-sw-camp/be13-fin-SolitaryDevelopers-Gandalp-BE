@@ -1,9 +1,15 @@
 package com.gandalp.gandalp.openAi;
 
+import com.gandalp.gandalp.schedule.domain.dto.OffScheduleTempResponseDto;
+import com.gandalp.gandalp.schedule.domain.dto.WorkTempResponseDto;
+import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
+import com.gandalp.gandalp.schedule.domain.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/gpt")
@@ -11,10 +17,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class GPTController {
 
     private final OpenAIService openAIService;
+    private final ScheduleService scheduleService;
 
 
     @GetMapping("/test")
-    public String testGpt() {
-        return openAIService.askQuestion("대한민국의 수도는 어디인가?");
+    public String testGpt(@RequestParam(required = true) String question) {
+        return openAIService.askQuestion(question);
+    }
+
+    @PostMapping("/generate")
+    public ResponseEntity<?> generateSchedule(@RequestBody OpenAIRequestDTO request) {
+        try{
+            ScheduleResult scheduleJson = openAIService.requestScheduleFromGPT(request);
+            return ResponseEntity.ok().body(scheduleJson);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @PostMapping("/createWorkTemp")
+    public ResponseEntity<?> createWorkTemp(@RequestBody ScheduleResult scheduleResult){
+        try {
+            List<WorkTempResponseDto> scheduleTempResponseDtos = scheduleService.createWorkTemp(scheduleResult);
+            return ResponseEntity.ok().body(scheduleTempResponseDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }

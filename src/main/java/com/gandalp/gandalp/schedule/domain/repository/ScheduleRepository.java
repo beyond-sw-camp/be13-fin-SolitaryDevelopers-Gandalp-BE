@@ -54,4 +54,12 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
     // 특정 시간에 해당 nurse가 담당하는 schedule을 하나만 반환하는 메서드
     Optional<Schedule> findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(Long nurseId, LocalDateTime start, LocalDateTime end);
 
+    @Query("SELECT s FROM Schedule s " +
+            "WHERE s.nurse.id = :nurseId " +
+            "AND FUNCTION('YEAR', s.startTime) = :year " +
+            "AND FUNCTION('MONTH', s.startTime) = :month")
+    List<Schedule> findByNurseAndMonth(@Param("nurseId") Long nurseId,
+                                       @Param("year") int year,
+                                       @Param("month") int month);
+
 }

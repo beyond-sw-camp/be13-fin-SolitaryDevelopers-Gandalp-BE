@@ -54,6 +54,8 @@ public class NurseService {
 	// 해당 과의 모든 간호사 조회 (페이징 처리 X)
 	public List<NurseStatusResponseDto> getSimpleNurseList(Department department) {
 
+
+
 		List<Nurse> nurseList = nurseRepository.findByDepartment(department);
 
 		return nurseList.stream()
@@ -171,26 +173,5 @@ public class NurseService {
 
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 

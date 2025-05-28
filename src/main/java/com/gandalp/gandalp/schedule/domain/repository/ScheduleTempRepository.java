@@ -7,6 +7,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
@@ -38,4 +39,7 @@ public interface ScheduleTempRepository extends JpaRepository<ScheduleTemp, Long
             "where s.nurse IN :nurseList " +
             "AND s.category = :category")
     List<ScheduleTemp> findAllWorkByCategory(@Param("nurseList") List<Nurse> nurseList, @Param("category") TempCategory category);
+
+    void deleteAllByCategory(TempCategory category);
+
 }

@@ -46,4 +46,22 @@ public class GPTController {
         }
 
     }
+
+    @PostMapping("/generate-and-create")
+    public ResponseEntity<?> generateAndCreateSchedule() {
+        try {
+            // 1. 요청 DTO 구성 (DB에서)
+            OpenAIRequestDTO dto = openAIService.buildRequestDTOFromDatabase();
+
+            // 2. GPT 호출
+            ScheduleResult scheduleResult = openAIService.requestScheduleFromGPT(dto);
+
+            // 3. DB 저장
+            List<WorkTempResponseDto> resultDtos = scheduleService.createWorkTemp(scheduleResult);
+
+            return ResponseEntity.ok(resultDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

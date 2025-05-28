@@ -6,8 +6,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.gandalp.gandalp.auth.model.service.AuthService;
+import com.gandalp.gandalp.hospital.domain.entity.Department;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
+import com.gandalp.gandalp.schedule.domain.entity.Category;
+import com.gandalp.gandalp.schedule.domain.entity.Schedule;
+import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
+import com.gandalp.gandalp.schedule.domain.entity.TempCategory;
+import com.gandalp.gandalp.schedule.domain.repository.ScheduleRepository;
 import com.gandalp.gandalp.schedule.domain.repository.ScheduleTempRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +24,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -29,14 +37,17 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class OpenAIService {
 
     private final OpenAIProperties openAIProperties;
     private final ObjectMapper objectMapper;
     private final NurseRepository nurseRepository;
     private final ScheduleTempRepository scheduleTempRepository;
+    private final ScheduleRepository scheduleRepository;
 
     private final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private final AuthService authService;
 
     public ScheduleResult requestScheduleFromGPT(OpenAIRequestDTO dto) {
         Map<String, Map<String, String>> finalSchedule = new TreeMap<>();
@@ -216,4 +227,70 @@ public class OpenAIService {
     }
 
 
+    public OpenAIRequestDTO buildRequestDTOFromDatabase() {
+        // 이미 만들어져 있던 임시 근무는 삭제
+        scheduleTempRepository.deleteAllByCategory(TempCategory.WORKING_TEMP);
+
+        int month = LocalDate.now().plusMonths(1).getMonthValue();
+        int year = LocalDate.now().plusMonths(1).getYear(); // 연도도 같이 바뀔 수 있으니 꼭 처리!
+
+        Department department = authService.getLoginMember().getDepartment();
+
+        List<Nurse> allNurses = nurseRepository.findByDepartment(department); // 필요시 부서 필터링
+
+        List<OpenAIRequestDTO.NurseScheduleInput> nurseInputs = allNurses.stream()
+                .map(nurse -> {
+                    List<Schedule> schedules = scheduleRepository.findByNurseAndMonth(nurse.getId(), year, month);
+
+                    int dayWorked = countShiftByTimeRange(schedules, "DAY");
+                    int eveningWorked = countShiftByTimeRange(schedules, "EVENING");
+                    int nightWorked = countShiftByTimeRange(schedules, "NIGHT");
+                    int totalWorked = dayWorked + eveningWorked + nightWorked;
+
+                    List<LocalDate> offDays = schedules.stream()
+                            .filter(s -> s.getCategory() == Category.ACCEPTED_OFF)
+                            .map(s -> s.getStartTime().toLocalDate())
+                            .distinct()
+                            .toList();
+
+                    return OpenAIRequestDTO.NurseScheduleInput.builder()
+                            .no(nurse.getNo().toString())
+                            .type(nurse.getType())
+                            .dayWorked(dayWorked)
+                            .eveningWorked(eveningWorked)
+                            .nightWorked(nightWorked)
+                            .totalWorked(totalWorked)
+                            .offDays(offDays)
+                            .build();
+                })
+                .toList();
+
+        return OpenAIRequestDTO.builder()
+                .year(year)
+                .month(month)
+                .nurses(nurseInputs)
+                .build();
+    }
+
+    private int countShiftByTimeRange(List<Schedule> schedules, String shiftType) {
+        int count = 0;
+        for (Schedule schedule : schedules) {
+            int hour = schedule.getStartTime().getHour();
+
+            switch (shiftType) {
+                case "DAY":
+                    if (hour >= 6 && hour < 14) count++;
+                    break;
+                case "EVENING":
+                    if (hour >= 14 && hour < 22) count++;
+                    break;
+                case "NIGHT":
+                    // 나이트는 밤 10시~익일 6시 (22:00 ~ 06:00)
+                    // 시간상 0~6 사이이거나 22~23 사이
+                    if (hour >= 22 || hour < 6) count++;
+                    break;
+            }
+        }
+        return count;
+    }
 }

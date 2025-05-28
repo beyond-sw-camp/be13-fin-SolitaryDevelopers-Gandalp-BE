@@ -505,15 +505,11 @@ public class ScheduleService {
         try {
 
             ScheduleTemp scheduleTemp = scheduleTempRepository.findById(workTempRequestUpdateDto.getWorkTempId()).orElseThrow(() -> new RuntimeException("scheduleTemp is empty"));
-
-            scheduleTemp.update(workTempRequestUpdateDto);
+            Nurse nurse = nurseRepository.findById(workTempRequestUpdateDto.getNurseId()).orElseThrow(() -> new RuntimeException("nurse is empty"));
+            scheduleTemp.update(nurse);
 
             return WorkTempResponseDto.builder()
-                    .workTempId(scheduleTemp.getId())
                     .nurseName(scheduleTemp.getNurse().getName())
-                    .content(scheduleTemp.getContent())
-                    .startTime(scheduleTemp.getStartTime())
-                    .endTime(scheduleTemp.getEndTime())
                     .build();
 
         } catch (Exception e) {
@@ -617,7 +613,7 @@ public class ScheduleService {
                 String nurseId = shift.getValue();
 
                 Nurse nurse = nurseRepository.findByNo(nurseId)
-                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 간호사 ID: " + nurseId));
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 간호사 UUID: " + nurseId));
 
                 TempCategory category = TempCategory.WORKING_TEMP;
                 LocalDateTime startTime;
@@ -673,5 +669,4 @@ public class ScheduleService {
 
         return workTempResponseDtos;
     }
-
 }

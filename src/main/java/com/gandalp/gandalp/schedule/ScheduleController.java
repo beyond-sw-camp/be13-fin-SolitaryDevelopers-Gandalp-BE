@@ -1,6 +1,7 @@
 package com.gandalp.gandalp.schedule;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -297,6 +298,20 @@ public class ScheduleController {
         try {
             ScheduleResponseDto workScheduleResponseDto = scheduleService.acceptWork(workScheduleId);
             return ResponseEntity.ok().body(workScheduleResponseDto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "근무 승인")
+    @PostMapping("/accept-works")
+    public ResponseEntity<?> acceptWorks(@RequestBody List<Long> workScheduleIds) {
+        try {
+            List<ScheduleResponseDto> workScheduleResponseDtos = new ArrayList<>();
+            for(Long id : workScheduleIds) {
+                workScheduleResponseDtos.add(scheduleService.acceptWork(id));
+            }
+            return ResponseEntity.ok().body(workScheduleResponseDtos);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

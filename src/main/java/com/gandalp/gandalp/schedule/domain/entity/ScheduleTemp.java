@@ -71,9 +71,7 @@ public class ScheduleTemp extends BaseEntity {
         this.category = TempCategory.REJECTED_OFF;
     }
 
-    public void update(WorkTempRequestUpdateDto workTempRequestUpdateDto){
-        this.content = workTempRequestUpdateDto.getContent();
-        this.startTime = workTempRequestUpdateDto.getStartTime();
-        this.endTime = workTempRequestUpdateDto.getEndTime();;
+    public void update(Nurse nurse){
+        this.nurse = nurse;
     }
 }

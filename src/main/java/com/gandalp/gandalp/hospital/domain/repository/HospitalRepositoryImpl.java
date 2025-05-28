@@ -34,11 +34,11 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
 
         BooleanBuilder search = new BooleanBuilder();
 
-
+        // keyword가 null인 경우
         if (keyword != null && !keyword.isBlank()) {
             search.and(
-                    hospital.name.containsIgnoreCase(keyword)
-                            .or(hospital.address.containsIgnoreCase(keyword))
+                hospital.name.containsIgnoreCase(keyword)
+                    .or(hospital.address.containsIgnoreCase(keyword))
             );
         }
 

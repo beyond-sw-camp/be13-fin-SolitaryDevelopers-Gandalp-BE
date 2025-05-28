@@ -54,6 +54,8 @@ public class HeadNurseService {
         String password = passwordEncoder.encode(reqDto.getPassword());
 
 
+
+
         // 5. nurse 생성
         Nurse nurse = Nurse.builder()
                             .department(department)

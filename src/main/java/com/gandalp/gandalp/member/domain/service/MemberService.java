@@ -96,10 +96,14 @@ public class MemberService {
 
         Member loginMember = authService.getLoginMember();
 
+        String label = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("member",
+            String.valueOf(loginMember.getType())).orElse(loginMember.getType().name());
+
         return MemberInfoDto.builder()
             .id(loginMember.getId())
             .hospitalName(loginMember.getHospital().getName())
             .deptName(loginMember.getDepartment().getName())
+            .type(label)
             .build();
     }
 

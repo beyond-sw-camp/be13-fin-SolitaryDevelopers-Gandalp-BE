@@ -42,6 +42,7 @@ public class ScheduleValidator {
     // content 파싱 및 LocalDateTime 변환
     public static class ParsedShift {
         public LocalDateTime startTime;
+        public String shiftType;
         LocalDateTime endTime;
     }
     public ParsedShift parseContentToShiftTime(String content) {
@@ -72,6 +73,7 @@ public class ScheduleValidator {
         ParsedShift result = new ParsedShift();
         result.startTime = startTime;
         result.endTime = endTime;
+        result.shiftType = timeStr;
         return result;
     }
 }

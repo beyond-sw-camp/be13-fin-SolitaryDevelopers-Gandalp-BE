@@ -75,50 +75,96 @@ public class ShiftServiceImpl implements ShiftService {
 
         // 2. 게시글의 일정 찾기 (board.content 파싱)
         ScheduleValidator.ParsedShift boardShift = scheduleValidator.parseContentToShiftTime(board.getContent());
+        // 3. 댓글의 일정 찾기 (comment.content 파싱)
+        ScheduleValidator.ParsedShift commentShift = scheduleValidator.parseContentToShiftTime(comment.getContent());
+
+        // *** 교대 종류(shiftType) 일치 검증 ***
+        String boardShiftType = boardShift.shiftType;    // 예: "데이", "이브닝", "나이트"
+        String commentShiftType = commentShift.shiftType;
+
+        // 데이/이브닝은 서로 교환 가능, 나이트는 나이트만
+        boolean isBoardDayOrEvening = boardShiftType.equals("데이") || boardShiftType.equals("이브닝");
+        boolean isCommentDayOrEvening = commentShiftType.equals("데이") || commentShiftType.equals("이브닝");
+        boolean isBoardNight = boardShiftType.equals("나이트");
+        boolean isCommentNight = commentShiftType.equals("나이트");
+
+        if (isBoardDayOrEvening) {
+            if (!isCommentDayOrEvening) {
+                throw new IllegalArgumentException("데이/이브닝 교대 요청에는 데이/이브닝 댓글만 교환할 수 있습니다.");
+            }
+        } else if (isBoardNight) {
+            if (!isCommentNight) {
+                throw new IllegalArgumentException("나이트 교대 요청에는 나이트 댓글만 교환할 수 있습니다.");
+            }
+        } else {
+            throw new IllegalArgumentException("알 수 없는 교대 타입입니다.");
+        }
+
+        // 이하 기존 코드 유지
         Schedule boardSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
                 boardNurse.getId(), boardShift.startTime, boardShift.startTime
         ).orElseThrow(() -> new RuntimeException("게시글 작성자의 일정이 없습니다."));
 
-        // 3. 댓글의 일정 찾기 (comment.content 파싱)
-        ScheduleValidator.ParsedShift commentShift = scheduleValidator.parseContentToShiftTime(comment.getContent());
         Schedule commentSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
                 commentNurse.getId(), commentShift.startTime, commentShift.startTime
         ).orElseThrow(() -> new RuntimeException("댓글 작성자의 일정이 없습니다."));
 
-        // 4. swap: nurse만 서로 교환
         Nurse temp = boardSchedule.getNurse();
         boardSchedule.setNurse(commentSchedule.getNurse());
         commentSchedule.setNurse(temp);
 
-        // 5. 저장
         scheduleRepository.save(boardSchedule);
         scheduleRepository.save(commentSchedule);
 
-        // 6. 게시글 상태 변경
         board.completeRequest();
         shiftRepository.save(board);
 
         mailService.sendSimpleMailMessage(boardNurse, commentNurse);
     }
 
+
+//    @Override
 //    @Transactional
 //    public void submitComment(Long commentId) {
-//    Comment comment = commentRepository.findById(commentId)
-//            .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+//        Comment comment = commentRepository.findById(commentId)
+//                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 //
-//    Board board = comment.getBoard();
-//    if (board == null) {
-//        throw new IllegalArgumentException("댓글에 해당하는 게시글이 없습니다.");
-//    }
+//        Board board = comment.getBoard();
+//        if (board == null) {
+//            throw new IllegalArgumentException("댓글에 해당하는 게시글이 없습니다.");
+//        }
+//        if (board.getBoardStatus() == BoardStatus.Completed) {
+//            throw new IllegalStateException("이 게시물은 이미 채택된 상태입니다.");
+//        }
 //
-//    // 이미 채택된 게시글이면 예외 발생
-//    if (board.getBoardStatus() == BoardStatus.Completed) {
-//        throw new IllegalStateException("이 게시물은 이미 채택된 상태입니다.");
-//    }
+//        // 1. 게시글 nurse와 댓글 nurse
+//        Nurse boardNurse = board.getNurse();
+//        Nurse commentNurse = comment.getNurse();
 //
-//    board.completeRequest(); // Setter 대신 명시적 메서드 사용
-//    shiftRepository.save(board);
+//        // 2. 게시글의 일정 찾기 (board.content 파싱)
+//        ScheduleValidator.ParsedShift boardShift = scheduleValidator.parseContentToShiftTime(board.getContent());
+//        Schedule boardSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
+//                boardNurse.getId(), boardShift.startTime, boardShift.startTime
+//        ).orElseThrow(() -> new RuntimeException("게시글 작성자의 일정이 없습니다."));
 //
+//        // 3. 댓글의 일정 찾기 (comment.content 파싱)
+//        ScheduleValidator.ParsedShift commentShift = scheduleValidator.parseContentToShiftTime(comment.getContent());
+//        Schedule commentSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
+//                commentNurse.getId(), commentShift.startTime, commentShift.startTime
+//        ).orElseThrow(() -> new RuntimeException("댓글 작성자의 일정이 없습니다."));
+//
+//        // 4. swap: nurse만 서로 교환
+//        Nurse temp = boardSchedule.getNurse();
+//        boardSchedule.setNurse(commentSchedule.getNurse());
+//        commentSchedule.setNurse(temp);
+//
+//        // 5. 저장
+//        scheduleRepository.save(boardSchedule);
+//        scheduleRepository.save(commentSchedule);
+//
+//        // 6. 게시글 상태 변경
+//        board.completeRequest();
+//        shiftRepository.save(board);
 //    }
 
 

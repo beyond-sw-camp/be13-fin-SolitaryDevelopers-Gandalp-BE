@@ -42,21 +42,6 @@ public class CommentController {
     }
 
 
-//    @PostMapping("/{board-id}")
-//    public ResponseEntity<?> createComment(
-//            @PathVariable("board-id") Long boardId,
-//            @RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto) {
-//
-//        try {
-//            commentCreateRequestDto.setBoardId(boardId); // boardId를 DTO에 세팅
-//            CommentResponseDto commentResponseDto = commentService.createComment(commentCreateRequestDto);
-//            return ResponseEntity.ok().body(commentResponseDto);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//
-//    }
-
     //  댓글 U
     @Operation(summary = "댓글 수정", description = "댓글 수정")
 
@@ -73,18 +58,6 @@ public class CommentController {
         }
     }
 
-//    @PutMapping("/{comment-id}")
-//    public ResponseEntity<?> updateComment(
-//            @PathVariable("comment-id") Long commentId,
-//            @RequestBody @Valid CommentUpdateDto commentUpdateDto, Long nurseId) {
-//        try {
-//            commentUpdateDto.setCommentId(commentId);
-//            CommentResponseDto commentResponseDto = commentService.updateComment(commentUpdateDto, nurseId);
-//            return ResponseEntity.ok().body(commentResponseDto);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
 
     // 댓글 D
     @Operation(summary = "댓글 삭제", description = "댓글 삭제")
@@ -99,19 +72,5 @@ public class CommentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-//    @DeleteMapping("/{comment-id}")
-//    public ResponseEntity<?> deleteComment(
-//            @PathVariable("comment-id") Long commentId,
-//            @RequestParam Long nurseId) { // nurseId 추가
-//        try {
-//            commentService.deleteComment(commentId, nurseId);
-//            return ResponseEntity.ok().body("댓글이 삭제되었습니다.");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-//
 
 }

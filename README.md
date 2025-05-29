@@ -389,6 +389,28 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <summary>오프 반려</summary>
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/6c79f773-9a32-4bcc-9e27-2e13784ecd6d" />      
         </details>
+    <summary>캘린더</summary>
+        <details>
+        <summary>개인 일정 생성</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/2ace2f45-5921-4032-ac2c-0cc97edb9c9e" />
+        </details>
+        <details>
+        <summary>개인 일정 수정</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/15143904-96f8-402b-bbe6-65bff9c26877" />
+        </details>
+        <details>
+        <summary>개인 일정 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/fe776c0a-9c2f-4998-b2fc-b3dfb093b950" />
+        </details>
+    <summary>수술실</summary>
+        <details>
+        <summary>수술 일정 생성</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/60fc1855-6e90-42fa-b35a-5d92fb0d2a59" />
+        </details>
+        <details>
+        <summary>수술 일정 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/498fd42c-8c63-4655-9db6-55722da3f1cd" />
+        </details>
 </details>
 
 

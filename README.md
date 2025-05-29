@@ -352,6 +352,47 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/5119c679-2f83-4d6e-a7cd-8f83d5459ef7" />
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/0dc9d363-4e2d-4fd5-a937-f1f5f99f035a" />
         </details>
+        <summary>교대 근무 교환</summary>
+        <details>
+        <summary>교대 요청 글 기본 조회</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/b785208f-ba3c-451b-840f-6d58513b76b8" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/ef1704b1-6823-4ad5-9a28-3c202dbe9a31" />
+        </details>
+        <details>
+        <summary>교대 요청 글 단건 상세 조회</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/28c63fb0-01a6-4f4d-939a-3f21573d7f9a" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/603d5cb5-1a5e-483a-af7e-67810eb390fd" />
+        </details>
+        <details>
+        <summary>교대 요청 글 등록</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/a058f3c2-437c-4f34-99f3-d13255520bc4" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/8e1ee441-5c22-4147-86ec-5b6cff83c093" />
+        </details>
+        <details>
+        <summary>교대 요청 글 삭제</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/0830c695-1d35-4599-8848-c940890051e4" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/8ac958f2-cae7-446c-a7a4-0eccc2a11f0c" />
+        </details>
+        <details>
+        <summary>교대 요청 댓글 채택</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/bb98d6bf-f9b8-49f7-941e-edbbbf8eb927" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/c9086339-ba88-4d24-b807-5e8b7a5c90f7" />
+        </details>
+        <details>
+        <summary>댓글 등록</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/300e9423-abbf-49c3-88fb-931c3b509dbe" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/a26b21cf-6b4c-429f-99a4-13f74d47fc87" />
+        </details>
+        <details>
+        <summary>댓글 수정</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/9ebc185b-3753-433d-bf76-68c5bcaad05d" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/155a6ff0-9476-4d76-8d59-d6d1c6c08e2b" />
+        </details>
+        <details>
+        <summary>댓글 삭제</summary>
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/4902c39c-37e5-4162-9e7f-0bd21635b06d" />
+        <img width="1202" alt="댓글 생성" src="https://github.com/user-attachments/assets/f0d10d4a-01df-4802-9869-27a799a85b6e" />
+        </details>
         </details>
 </details>
 
@@ -410,6 +451,39 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <details>
         <summary>수술 일정 삭제</summary>
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/498fd42c-8c63-4655-9db6-55722da3f1cd" />
+        </details>
+        <summary>교대 근무 교환</summary>
+        <details>
+        <summary>교대 요청 글 기본 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c549e41f-c98a-4a8b-b528-c75c6e687144" />      
+        </details>
+        <details>
+        <summary>교대 요청 글 단건 상세 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/a3158b76-5039-4a21-bf6b-16e2f0d176a8" />      
+        </details>
+        <details>
+        <summary>교대 요청 글 등록</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/496fa16e-21e6-4036-804a-16867e06df0a" />      
+        </details>
+        <details>
+        <summary>교대 요청 글 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c848fc2c-c8f1-433f-9647-ec6efa4cf917" />      
+        </details>
+        <details>
+        <summary>교대 요청 댓글 채택</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/9c61705f-9a12-4bc4-92d0-c2f6e847068a" />      
+        </details>
+        <details>
+        <summary>댓글 등록</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/b5784518-6a37-462a-81a0-0ea4810f3d0a" />
+        </details>
+        <details>
+        <summary>댓글 수정</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/ecd3ef1e-3c63-4369-af8f-421245bb2856" />
+        </details>
+        <details>
+        <summary>댓글 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f4600291-abc8-4e6b-aae4-f4a78faa7def" />
         </details>
 </details>
 

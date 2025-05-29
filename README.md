@@ -123,7 +123,23 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
 
 <details>
 <summary>📡 단위 테스트 결과서</summary>
-    <summary>근무</summary>
+    <summary>인증</summary>
+        <details>
+        <summary>회원가입</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/008c6cde-095b-42bb-9f37-5e88f7990f14" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/e9c429f9-796a-436f-a0eb-c13a966c664a" />  
+        </details>
+        <details>
+        <summary>로그인 </summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/99276963-9e8d-44fb-bd56-cd8e2af48952" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/52c70c5d-6321-4181-9e84-a6ba3982501b" />      
+        </details>
+        <details>
+        <summary>로그아웃</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/99082d38-a366-40de-8d02-22c21c99a407" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/16344fb0-7541-4d1a-89fe-dcb69205c69c" />       
+        </details>
+    <summary>근무</summary>        
         <details>
         <summary>근무표 조회</summary>
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/81e89a4e-27d4-48db-b4e0-ac92371612b8" />
@@ -154,7 +170,7 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/0223ec58-e775-4385-bba1-ad864f53ad8e" />
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/321b14e6-d3f8-47cb-bbba-62532ab53758" />            
         </details>
-        <summary>오프</summary>
+    <summary>오프</summary>
         <details>
         <summary>간호사별 원하는 오프 신청</summary>
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/7643b78c-94aa-44ef-be91-75ce09a1925c" />
@@ -190,7 +206,7 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c6bbee6f-b238-44ee-b037-8eb3ee4662e6" />
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d7578f02-5f32-4aa1-bcdb-6adcd043c8e9" />            
         </details>
-    </details>
+        </details>
 </details>
 
 ## 🖼️ 5. Frontend

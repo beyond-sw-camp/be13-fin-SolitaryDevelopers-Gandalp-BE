@@ -206,6 +206,53 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c6bbee6f-b238-44ee-b037-8eb3ee4662e6" />
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d7578f02-5f32-4aa1-bcdb-6adcd043c8e9" />            
         </details>
+    <summary>캘린더</summary>
+        <details>
+        <summary>모든 간호사 개인일정 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/2021bbdf-54f8-49f4-a5be-ca9145a28847" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/b84f3fd8-8291-4074-8d77-88769b495c82" />
+        </details>
+        <details>
+        <summary>간호사 개인일정 수정</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/58069be2-56b4-41f3-a6b4-6d024e58aa69" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f57e5e49-d5f9-498d-add9-9c808d3692a3" />
+        </details>
+        <details>
+        <summary>간호사 개인일정 생성</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f6308ce9-bbe2-48dc-8f89-886f3a4aa760" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/6f4cb58a-4a73-4fbd-805c-9a896ebf1a66" />
+        </details>
+        <details>
+        <summary>간호사 개인일정 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/af490839-6e30-4e3d-b229-14a44552702d" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/817a6f83-9fc1-4aa1-b587-8efb971508c8" />
+        </details>
+        <details>
+        <summary>간호사 개인일정 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d73cdf63-f84f-4a7b-bdb1-bd8774afc7c0" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/1ca10372-d534-49fc-bc5c-44ddfad34df7" />
+        </details>
+    <summary>수술실</summary>
+        <details>
+        <summary>수술실 예약 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/cb53fe19-b6da-4c51-bad3-00084640eacd" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/5f7f82e0-1534-43c7-9992-9899594a3699" />
+        </details>
+        <details>
+        <summary>수술실 예약</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/9a54bdb1-3042-43ae-a18d-7e1c11a01e63" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/a0626b20-b73c-4dc6-ac0a-ccd0f59c0744" />
+        </details>
+        <details>
+        <summary>수술실 예약 취소</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/49b770fd-9573-435f-85ea-d3092bff25f7" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d135e299-c193-4223-8402-25c091953321" />
+        </details>
+        <details>
+        <summary>수술실 목록 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/5119c679-2f83-4d6e-a7cd-8f83d5459ef7" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/0dc9d363-4e2d-4fd5-a937-f1f5f99f035a" />
+        </details>
         </details>
 </details>
 

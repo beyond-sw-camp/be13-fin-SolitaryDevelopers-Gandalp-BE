@@ -165,6 +165,47 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/97960574-5485-44e8-9781-6730de0e8e58" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/12561d63-9811-4454-b480-050540164b68" />       
         </details>
+    <summary>간호사</summary>
+        <details>
+        <summary>간호사 전체 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/124a1fe8-56cf-4f1b-85f8-2b1500e0147a" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/bb115618-5f15-4336-a1ec-30db52513462" />
+        </details>
+        <details>
+        <summary>간호사 검색</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/22fa8cc6-0720-40f9-9a20-b8c8fde2da33" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a7a1865d-99c8-4ff4-a55c-c4a418ecab45" />   
+        </details>
+        <details>
+        <summary>간호사 단건 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/34c3674f-f7f2-4234-8dcc-0493fe06b98d" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/2c8fc5a6-7ce8-46ec-a424-c9a6ba418c59" />     
+        </details>
+        <details>
+        <summary>간호사 생성</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/5e1c5044-cabb-4f4f-bffa-06ee60437e46" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/b0e2c33f-a689-4168-8085-40143d078da5" />       
+        </details>
+        <details>
+        <summary>간호사 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/f6c6fe5f-9ce2-4efc-860a-8449a41c7fae" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/e09b2a18-e309-4d9d-a62b-acd8b91ec4b9" />       
+        </details>
+        <details>
+        <summary>간호사 삭제</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/67f9670c-b7e8-4a46-a6b7-8bc2e57178bf" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/5f1fc671-1369-4035-9a49-7aadc4dcdefe" />       
+        </details>
+        <details>
+        <summary>간호사들 현재 근무 상태 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/7b56ede5-efe2-4fd9-9fd3-7109b0ddc8fa" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/3a42ae34-0883-4e70-ada2-3b537e540492" />       
+        </details>
+        <details>
+        <summary>간호사 현재 근무 상태 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/16829c2e-7c61-4259-a68c-89701a73d2b9" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a19fda12-6a11-4060-8e7d-dd9fcba46fb1" />       
+        </details>  
     <summary>근무</summary>        
         <details>
         <summary>근무표 조회</summary>

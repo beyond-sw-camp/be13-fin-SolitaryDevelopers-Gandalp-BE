@@ -121,12 +121,6 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
     <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f8c01ad5-7b8a-427c-8484-54a3c1ac4787" />
 </details>
 
-
-
-
-
-
-
 <details>
 <summary>📡 단위 테스트 결과서</summary>
     <summary>근무</summary>
@@ -198,13 +192,41 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         </details>
     </details>
 </details>
----
 
 ## 🖼️ 5. Frontend
 
 <details>
 <summary>📄 페이지별 구성도</summary>
 https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?node-id=0-1&p=f&t=GbrbuA8QjXI0E5iN-0
+</details>
+<details>
+<summary>📄 UX/UI 테스트</summary>
+    <summary>근무</summary>
+        <details>
+        <summary>근무표 자동 생성</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/e0416c29-4c66-4241-b844-da8a71c8705f" />       
+        </details>
+        <details>
+        <summary>근무 수정</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/0bbc95f5-3455-459f-abb9-dbc06625122d" />
+        </details>
+        <details>
+        <summary>근무 반영</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/8a53f3c1-fb71-430a-8461-6e476218a0eb" />      
+        </details>
+    <summary>오프</summary>
+        <details>
+        <summary>오프 신청</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c6ac29fa-71e2-476f-a6e1-567a8a5e5092" />       
+        </details>
+        <details>
+        <summary>오프 승인</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/41526678-ba45-4dbb-81b4-ef7cd0118ce0" />
+        </details>
+        <details>
+        <summary>오프 반려</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/6c79f773-9a32-4bcc-9e27-2e13784ecd6d" />      
+        </details>
 </details>
 
 

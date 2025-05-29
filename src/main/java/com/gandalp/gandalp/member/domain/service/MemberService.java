@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final CommonCodeRepository commonCodeRepository;
     private final AuthService authService;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<MemberResponseDto> getAllMembers(MemberSearchOption option, String keyword, Type type, Pageable pageable){
 
@@ -64,6 +66,8 @@ public class MemberService {
     @Transactional
     public MemberResponseDto updateMember(Long memberId, MemberUpdateDto updateDto){
 
+        String password = updateDto.getPassword();
+
         // 1. member 조회
         Member member = memberRepository.findById(memberId).orElseThrow(
                 ()-> new EntityNotFoundException("해당하는 회원이 존재하지 않습니다.")
@@ -72,6 +76,9 @@ public class MemberService {
         Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("member",String.valueOf(member.getType()));
         if(codeLabel.isEmpty()) throw new RuntimeException("codeLabel is empty");
 
+        String encodedPassword = passwordEncoder.encode(password);
+
+        updateDto.setPassword(encodedPassword);
 
         // 2. update
         member.update(updateDto);

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -46,7 +47,7 @@ public class HospitalController {
             @RequestParam double lat,
             @RequestParam double lon, // 현재 위치
             @RequestParam SortOption sortOption,
-            @RequestParam(required = false) String keyword ){
+            @RequestParam(required = false) String keyword, Principal principal){
 
 //        geoCodingService.convertAllHospitalAddressToGeo();
 
@@ -54,6 +55,12 @@ public class HospitalController {
 
         try {
             hospitalList = hospitalService.getNearestHospitals(lon, lat, keyword, sortOption);
+
+
+            messagingTemplate.convertAndSendToUser(
+                    principal.getName(),
+                    "/queue/near-hospitals", hospitalList);
+
 
         }catch (Exception e ){
             return ResponseEntity.badRequest().body(e.getMessage());

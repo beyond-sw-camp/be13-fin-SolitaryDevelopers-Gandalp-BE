@@ -542,6 +542,7 @@ public class ScheduleService {
                             .findCodeLabelByCodeGroupAndCodeValue("schedule_category", String.valueOf(work.getCategory()));
                     return WorkScheduleResponseDto.builder()
                             .workScheduleId(work.getId())
+                            .nurseId(work.getNurse().getId())
                             .nurseName(work.getNurse().getName())
                             .codeLabel(codeLabel.get())
                             .content(work.getContent())

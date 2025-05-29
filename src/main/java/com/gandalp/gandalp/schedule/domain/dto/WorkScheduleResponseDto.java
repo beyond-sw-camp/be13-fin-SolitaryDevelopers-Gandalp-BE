@@ -13,6 +13,8 @@ public class WorkScheduleResponseDto {
 
     private Long workScheduleId;
 
+    private Long nurseId;
+
     private String nurseName;
 
     private String codeLabel;

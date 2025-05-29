@@ -1,5 +1,6 @@
 package com.gandalp.gandalp.calender.domain.service;
 
+import com.gandalp.gandalp.auth.model.service.AuthService;
 import com.gandalp.gandalp.calender.domain.dto.OrsDeleteRequestDto;
 import com.gandalp.gandalp.calender.domain.dto.OrsGetRequestDto;
 import com.gandalp.gandalp.calender.domain.dto.OrsGetResponseDto;
@@ -10,6 +11,7 @@ import com.gandalp.gandalp.calender.domain.dto.PersonalScheduleRequestDto;
 import com.gandalp.gandalp.calender.domain.dto.PersonalScheduleResponseDto;
 import com.gandalp.gandalp.calender.domain.dto.PersonalScheduleUpdateRequestDto;
 import com.gandalp.gandalp.calender.domain.dto.RoomResponseDto;
+import com.gandalp.gandalp.hospital.domain.entity.Department;
 import com.gandalp.gandalp.hospital.domain.entity.Room;
 import com.gandalp.gandalp.hospital.domain.entity.Status;
 import com.gandalp.gandalp.hospital.domain.repository.RoomRepository;
@@ -42,6 +44,7 @@ public class CalenderService {
     private final RoomRepository roomRepository;
     private final SurgeryScheduleRepository surgeryScheduleRepository;
     private final SurgeryNurseRepository surgeryNurseRepository;
+    private final AuthService authService;
 
     @Transactional
     public PersonalScheduleResponseDto createPersonalSchedule(/*final*/ PersonalScheduleRequestDto personalScheduleRequestDto) {
@@ -101,7 +104,10 @@ public class CalenderService {
     }
 
     public List<PersonalScheduleResponseDto> getSchedules() {
-        List<Schedule> schedules = scheduleRepository.findAll();
+
+        Department department = authService.getLoginMember().getDepartment();
+        List<Nurse> nurseListByDepartment = nurseRepository.findByDepartment(department);
+        List<Schedule> schedules = scheduleRepository.findInNurseAndCategory(nurseListByDepartment, Category.PERSONAL);
 
         return schedules.stream().map(PersonalScheduleResponseDto::fromSchedule).collect(Collectors.toList());
     }
@@ -110,9 +116,9 @@ public class CalenderService {
     public OrsResponseDto createOrs(OrsRequestDto orsRequestDto) {
         Room room = roomRepository.findById(orsRequestDto.getRoomId()).orElseThrow(() -> new IllegalStateException("수술실이 존재하지 않습니다."));
 
-        if (room.getStatus().equals(Status.USING)) {
-            throw new IllegalStateException("이미 사용중인 수술실입니다.");
-        }
+//        if (room.getStatus().equals(Status.USING)) {
+//            throw new IllegalStateException("이미 사용중인 수술실입니다.");
+//        }
 
         boolean isOverlapping = !surgeryScheduleRepository.findOverlappingSchedules(orsRequestDto.getRoomId(), orsRequestDto.getStartTime(), orsRequestDto.getEndTime()).isEmpty();
 

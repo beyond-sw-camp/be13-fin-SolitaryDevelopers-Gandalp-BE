@@ -407,19 +407,19 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
     <summary>간호사</summary>
         <details>
         <summary>로그인 및 모든 간호사 조회 및 검색</summary>
-        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/5e9814c0-d61d-4f59-9a06-72bc2323ecb7" />      
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/b67bd9e6-d807-4980-9c54-5758c83ebc98" />
         </details>
         <details>
         <summary>간호사 생성</summary>
-        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/4bc1beef-f126-4949-9abe-b5d95b55b909" />     
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/123d928a-127a-4d74-9bd8-a0ad4616b2e0" />
         </details>
         <details>
         <summary>간호사 수정</summary>
-        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/bb58ac3e-1670-440d-8eda-5c6361488072" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/55356a7c-966f-4128-8119-4bbc1fafc8ad" />
         </details>
         <details>
         <summary>간호사 삭제</summary>
-        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/82c57954-cd87-46d5-a64d-76417c91f94b" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/145c143d-25f1-4bb1-b97f-fe53be2224a0" />
         </details>
     <summary>근무</summary>
         <details>

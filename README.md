@@ -205,7 +205,18 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <summary>간호사 현재 근무 상태 수정</summary>
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/16829c2e-7c61-4259-a68c-89701a73d2b9" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a19fda12-6a11-4060-8e7d-dd9fcba46fb1" />       
-        </details>  
+        </details>
+    <summary>응급실</summary>
+        <details>
+        <summary>로그인한 간호사의 병원 정보 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/73be85ca-e393-4c48-9d6c-3cc50e440ed6" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/6a247138-1473-4307-ac63-550b7d2fc969" />
+        </details>
+        <details>
+        <summary>응급실 병상 수 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a495bc72-d9f2-4dd6-bd24-4778fd288305" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a53dcc05-9661-4db2-83b1-873f212e35eb" />      
+        </details>
     <summary>공지사항</summary>
         <details>
         <summary>일반 공지사항 조회</summary>

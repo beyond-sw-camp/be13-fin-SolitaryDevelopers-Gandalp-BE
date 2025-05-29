@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -108,9 +107,10 @@ public class ShiftController {
     // 교대 글 D
     @Operation(summary = "교대 요청 글 삭제", description = "교대 요청 글 삭제")
     @DeleteMapping("/{board-id}")
-    public ResponseEntity<?> deleteShift(@PathVariable("board-id") Long boardId, @RequestBody Map<String, Long> body) {
+    public ResponseEntity<?> deleteShift(@PathVariable("board-id") Long boardId,
+                                         @RequestParam("nurseId") Long nurseId) {
         try {
-            Long nurseId = body.get("nurseId");
+//            Long nurseId = body.get("nurseId");
             shiftService.deleteShift(boardId, nurseId);
             return ResponseEntity.ok().body("교대 요청 글이 삭제되었습니다.");
         } catch (Exception e) {
@@ -118,17 +118,4 @@ public class ShiftController {
         }
     }
 
-
-//    @DeleteMapping("/{board-id}")
-//    public ResponseEntity<?> deleteShift(@PathVariable("board-id") Long boardId, Long nurseId) {
-//
-//        try {
-//            shiftService.deleteShift(boardId, nurseId);
-//
-////            return ResponseEntity.status(HttpStatus.OK).body("교대 요청 글이 삭제되었습니다.");
-//            return ResponseEntity.ok().body("교대 요청 글이 삭제되었습니다.");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
 }

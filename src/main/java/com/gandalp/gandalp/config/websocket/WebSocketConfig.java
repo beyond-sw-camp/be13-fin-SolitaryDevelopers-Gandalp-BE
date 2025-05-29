@@ -23,10 +23,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
 		// 특정 목적지 경로로 들어오는 메시지를, 구독중인 클라이언트에게 브로드캐스트한다.
-		registry.enableSimpleBroker("/topic");
+		registry.enableSimpleBroker("/topic", "/queue");
 
 		// 특정 목적지로 메시지를 보낼 수 있도록 한다.
 		registry.setApplicationDestinationPrefixes("/publish");
+
+		registry.setUserDestinationPrefix("/user");
 
 	}
 

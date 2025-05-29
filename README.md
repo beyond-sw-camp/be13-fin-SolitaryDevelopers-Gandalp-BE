@@ -404,6 +404,23 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 </details>
 <details>
 <summary>📄 UX/UI 테스트</summary>
+    <summary>간호사</summary>
+        <details>
+        <summary>로그인 및 모든 간호사 조회 및 검색</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/5e9814c0-d61d-4f59-9a06-72bc2323ecb7" />      
+        </details>
+        <details>
+        <summary>간호사 생성</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/4bc1beef-f126-4949-9abe-b5d95b55b909" />     
+        </details>
+        <details>
+        <summary>간호사 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/bb58ac3e-1670-440d-8eda-5c6361488072" />
+        </details>
+        <details>
+        <summary>간호사 삭제</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/82c57954-cd87-46d5-a64d-76417c91f94b" />
+        </details>
     <summary>근무</summary>
         <details>
         <summary>근무표 자동 생성</summary>

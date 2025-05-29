@@ -206,6 +206,27 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/16829c2e-7c61-4259-a68c-89701a73d2b9" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a19fda12-6a11-4060-8e7d-dd9fcba46fb1" />       
         </details>  
+    <summary>공지사항</summary>
+        <details>
+        <summary>일반 공지사항 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/2d075653-8d2b-4a06-80e9-8555004d179d" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/44d07441-e477-4ee6-90b4-c4f1f9458b9c" />
+        </details>
+        <details>
+        <summary>긴급 공지사항 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/c648e795-504a-4b5e-9da1-5c1b61a2f5cd" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/6148951c-e43b-49a8-a7b3-df68ff7e8c0f" />      
+        </details>
+        <details>
+        <summary>긴급 공지사항 생성</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/52c4a283-ac0a-417e-a452-c9bd0947d1df" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a9b3a6be-4c8d-4f8a-9598-adb8e0f75cb2" />       
+        </details>
+        <details>
+        <summary>긴급 공지사항 삭제</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/fc0250b1-49c5-424f-b85c-276d966f4f86" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/bfd7764a-a8fc-4214-886a-c658f9b742fe" />       
+        </details>
     <summary>근무</summary>        
         <details>
         <summary>근무표 조회</summary>

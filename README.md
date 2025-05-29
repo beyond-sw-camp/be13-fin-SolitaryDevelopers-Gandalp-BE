@@ -139,6 +139,32 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/99082d38-a366-40de-8d02-22c21c99a407" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/16344fb0-7541-4d1a-89fe-dcb69205c69c" />       
         </details>
+    <summary>회원</summary>
+        <details>
+        <summary>회원 정보 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/8c573911-33b7-430c-b156-ba2c2e50195d" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/cf591a5b-340b-4d61-b4c8-29305b6cb399" />
+        </details>
+        <details>
+        <summary>모든 회원 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/19f44517-47a1-4e4d-916c-20aade13c679" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/6ee7cf51-653e-4f8a-bd3a-a6b510e13442" />   
+        </details>
+        <details>
+        <summary>회원 검색</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/b0233521-a727-402b-b675-960fd27b3f52" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/7670e599-c866-40b6-8b3e-8dbfcb3270e5" />     
+        </details>
+        <details>
+        <summary>회원 삭제</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/45bd6ed0-87d8-470e-9a5b-df653bdd2220" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/446da33f-51e5-4d8f-90b8-b3c58377a75a" />       
+        </details>
+        <details>
+        <summary>내 정보 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/97960574-5485-44e8-9781-6730de0e8e58" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/12561d63-9811-4454-b480-050540164b68" />       
+        </details>
     <summary>근무</summary>        
         <details>
         <summary>근무표 조회</summary>

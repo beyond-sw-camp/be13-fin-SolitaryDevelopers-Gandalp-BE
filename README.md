@@ -121,21 +121,83 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
     <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f8c01ad5-7b8a-427c-8484-54a3c1ac4787" />
 </details>
 
+
+
+
+
+
+
 <details>
 <summary>📡 단위 테스트 결과서</summary>
-    <details>
-    <summary>임시 근무 조회</summary>
-    <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/80617ef6-6547-453e-9649-cf3b7e9aa69e" />
-    <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d40ed40b-b25d-4f7b-b250-450eeb165b58" />            
-    </details>
-    <details>
-    <summary>오프 생성</summary>
-    <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/899a14f1-dd52-41a6-abfa-e73392c463e9" />
-    <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/b4ccf57f-1adb-4b6a-89d1-0b657da78e81" />            
+    <summary>근무</summary>
+        <details>
+        <summary>근무표 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/81e89a4e-27d4-48db-b4e0-ac92371612b8" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/5464edf9-217d-478e-9c62-ea17d3bb825c" />            
+        </details>
+        <details>
+        <summary>근무표 자동생성 </summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d2a71018-b3be-483e-a77b-c6c5f1f9a039" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/2c1a4965-9fff-4dc1-9ad4-9abd99928409" />            
+        </details>
+        <details>
+        <summary>임시 생성된 근무표 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/80617ef6-6547-453e-9649-cf3b7e9aa69e" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d40ed40b-b25d-4f7b-b250-450eeb165b58" />            
+        </details>
+        <details>
+        <summary>임시 생성된 근무표 수정</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f1765d63-47ff-41d9-87de-b964e3ca0152" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/6be4fcb4-8383-4252-8d87-188830e7ae54" />            
+        </details>
+        <details>
+        <summary>임시 생성된 근무표 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/a1111ef0-d6cc-4171-87dc-c63643b121a2" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/b8e50678-7179-436e-9991-9f217f659a0f" />            
+        </details>
+        <details>
+        <summary>임시 생성된 근무표 승인</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/0223ec58-e775-4385-bba1-ad864f53ad8e" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/321b14e6-d3f8-47cb-bbba-62532ab53758" />            
+        </details>
+        <summary>오프</summary>
+        <details>
+        <summary>간호사별 원하는 오프 신청</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/7643b78c-94aa-44ef-be91-75ce09a1925c" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/7259c0e5-1772-4601-a470-be96e80f4340" />            
+        </details>
+        <details>
+        <summary>간호사별 각자 신청한 오프 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/a8a78e78-8e10-4e7a-b332-ce3c0b74b4ba" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c378d284-8117-4c99-9611-0398e0b49ffb" />            
+        </details>
+        <details>
+        <summary>간호사별 각자 신청한 오프 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/3f37e88d-0c57-4049-8a3f-ab731929c905" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/0a6fdabb-a020-441c-a027-7d46520be7f6" />            
+        </details>
+        <details>
+        <summary>임시 오프 승인</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/2012ed9b-1a35-4493-b34f-04ea94d78bb9" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/e47a1213-58de-4813-9c07-6030d106aac1" />            
+        </details>
+        <details>
+        <summary>임시 오프 반려</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/36a7831f-0cd8-4b1a-b7e4-120e3d56be81" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/e0ff736c-b5cf-4210-b9de-e5a1cb72315b" />            
+        </details>
+        <details>
+        <summary>간호사별 승인된 오프 조회</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/2755d3e7-7f87-45bd-adcd-f60c5c29949c" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/295adc2d-25ff-4c48-bd28-8d26395bdea8" />            
+        </details>
+        <details>
+        <summary>간호사별 승인된 오프 삭제</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/c6bbee6f-b238-44ee-b037-8eb3ee4662e6" />
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/d7578f02-5f32-4aa1-bcdb-6adcd043c8e9" />            
+        </details>
     </details>
 </details>
-  
-
 ---
 
 ## 🖼️ 5. Frontend

@@ -1,6 +1,7 @@
 package com.gandalp.gandalp.hospital.domain.service;
 
 import com.gandalp.gandalp.hospital.domain.dto.DestinationDto;
+import com.gandalp.gandalp.hospital.domain.dto.RouteInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -29,7 +32,7 @@ public class DirectionCacheService {
     private String clientSecret;
 
     private static final String OPTION  = "trafast";
-
+    // trafast 실시간 빠른 길
 
     // 도로상 실제 거리 가져오기
     // 캐시 적용
@@ -42,18 +45,28 @@ public class DirectionCacheService {
      * 병원과 현재 위치에서의 거리를 돌려줌
      * */
 
+    // 소수점이 너무 길어서 미세하게 다른 경우 계속 API 호출하는 문제 반올림해서 4~50 정도는 커버해서
+    // naver api  호출 횟수를 줄임
+
 
     // 거리 계산만 담당 ( redis에 저장 )
     @Cacheable( cacheNames = "routeDistances",
-            key = "#longitude + ',' + #latitude + ':' + #dest.longitude+ ',' + #dest.latitude"
+            key = "T(com.gandalp.gandalp.hospital.domain.service.DirectionCacheService)" +
+                    ".makeCacheKey(#longitude, #latitude, #dest.longitude, #dest.latitude)"
     )
-    public double getDistanceForPair( double latitude, double longitude, DestinationDto dest) {
+    public RouteInfoDto getDistanceForPair(double longitude, double latitude, DestinationDto dest) {
+
+        // redis 캐시에 없으면 로그 찍힘
+        log.info("▶ [캐시 미스] origin={}→dest={}", longitude + "," + latitude,
+                dest.getLongitude() + "," + dest.getLatitude());
+
         String start = longitude + "," + latitude;
         String goal  = dest.getLongitude() + "," + dest.getLatitude();
         String url   = "https://maps.apigw.ntruss.com/map-direction-15/v1/driving"
                 + "?start=" + URLEncoder.encode(start, StandardCharsets.UTF_8)
                 + "&goal="  + URLEncoder.encode(goal,  StandardCharsets.UTF_8)
-                + "&option=" + OPTION;
+                + "&option=" + OPTION
+                + "&cartype=" + 1;
         try {
             HttpURLConnection conn = (HttpURLConnection)new URL(url).openConnection();
             conn.setRequestMethod("GET");
@@ -62,7 +75,7 @@ public class DirectionCacheService {
 
             if(conn.getResponseCode() != 200){
                 conn.disconnect();
-                return Double.MAX_VALUE;
+                return RouteInfoDto.empty();
             }
 
 
@@ -77,15 +90,32 @@ public class DirectionCacheService {
             JSONObject root     = new JSONObject(sb.toString());
             JSONObject routeObj = root.getJSONObject("route");
             JSONArray arr      = routeObj.getJSONArray(OPTION);
-            if (arr.isEmpty()) return Double.MAX_VALUE;
+            if (arr.isEmpty()) return RouteInfoDto.empty();
 
             JSONObject summary = arr.getJSONObject(0).getJSONObject("summary");
-            return summary.getDouble("distance") / 1000.0;
+            double distanceKm = summary.getDouble("distance") / 1000.0;
+            double durationSec = summary.getDouble("duration");
+
+            return new RouteInfoDto(distanceKm, durationSec);
 
         } catch (Exception ex) {
             log.error("Direction API 예외: dest={}", dest, ex);
-            return Double.MAX_VALUE;
+            return RouteInfoDto.empty();
         }
+
+
+    }
+
+    // redis 키 생성
+
+    // 위에 표현식에서 사용함
+    public static String makeCacheKey(double lon, double lat, double destLon, double destLat) {
+
+        BigDecimal lonBd = BigDecimal.valueOf(lon).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal latBd = BigDecimal.valueOf(lat).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal destLonBd = BigDecimal.valueOf(destLon).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal destLatBd = BigDecimal.valueOf(destLat).setScale(4, RoundingMode.HALF_UP);
+        return lonBd + "," + latBd + ":" + destLonBd + "," + destLatBd;
     }
 
 

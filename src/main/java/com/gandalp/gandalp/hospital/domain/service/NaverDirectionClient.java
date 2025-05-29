@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gandalp.gandalp.hospital.domain.dto.RouteInfoDto;
 import org.springframework.stereotype.Service;
 
 import com.gandalp.gandalp.hospital.domain.dto.DestinationDto;
@@ -27,13 +28,13 @@ public class NaverDirectionClient {
      * @param destinations 병원 리스트 (병원 ID + 위도/경도 정보 포함)
      * @return 병원 ID → 거리(km) 매핑
      */
-    public Map<Long, Double> getRoadDistances(
-        double latitude, double longitude,
+    public Map<Long, RouteInfoDto> getRoadDistances(
+        double longitude, double latitude,
         List<DestinationDto> destinations
     ) {
         log.info("🚗 도로 거리 계산 시작 - 기준점: ({}, {}), 대상 병원 수: {}", latitude, longitude, destinations.size());
 
-        Map<Long, Double> distances = new HashMap<>();
+        Map<Long, RouteInfoDto> routes = new HashMap<>();
         final int BATCH = 25;
 
         for (int i = 0; i < destinations.size(); i += BATCH) {
@@ -42,24 +43,25 @@ public class NaverDirectionClient {
 
             for (DestinationDto dest : batch) {
                 try {
-                    double km = cacheService.getDistanceForPair(latitude, longitude, dest);
+                    RouteInfoDto info = cacheService.getDistanceForPair(longitude, latitude, dest);
 
-                    if (km != Double.MAX_VALUE) {
-                        distances.put(dest.getHospitalId(), km);
-                        log.debug("✅ 거리 계산 성공 - 병원 ID: {}, 거리: {}km", dest.getHospitalId(), km);
+                    if (info.getDistanceKm() != Double.MAX_VALUE) { // 값이 있으면
+                        routes.put(dest.getHospitalId(), info);
+                        log.debug(" 거리 계산 성공 - 병원 ID: {}, 거리: {}km, 시간 : {}sec", dest.getHospitalId(), info.getDistanceKm()
+                        , info.getDurationSec());
                     } else {
                         log.warn("❌ 거리 계산 실패 (Double.MAX_VALUE) - 병원 ID: {}, 좌표: ({}, {})",
-                            dest.getHospitalId(), dest.getLatitude(), dest.getLongitude());
+                            dest.getHospitalId(), info.getDistanceKm(), info.getDurationSec());
                     }
 
                 } catch (Exception e) {
-                    log.error("💥 거리 계산 중 예외 발생 - 병원 ID: {}, 좌표: ({}, {})",
+                    log.error(" 거리 계산 중 예외 발생 - 병원 ID: {}, 좌표: ({}, {})",
                         dest.getHospitalId(), dest.getLatitude(), dest.getLongitude(), e);
                 }
             }
         }
 
-        log.info("🚗 도로 거리 계산 완료 - 성공 병원 수: {}", distances.size());
-        return distances;
+        log.info(" 도로 거리 계산 완료 - 성공 병원 수: {}", routes.size());
+        return routes;
     }
 }

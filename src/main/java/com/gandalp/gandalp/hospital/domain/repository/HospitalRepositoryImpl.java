@@ -4,6 +4,8 @@ import com.gandalp.gandalp.hospital.domain.dto.HospitalDto;
 import com.gandalp.gandalp.hospital.domain.entity.SortOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +17,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.gandalp.gandalp.hospital.domain.entity.QHospital.hospital;
 
@@ -29,7 +32,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
 
 
     @Override
-    public Page<HospitalDto> searchNearbyHospitals(List<Long> hospitalIds, String keyword, SortOption sortOption, Pageable pageable) {
+    public List<HospitalDto> searchNearbyHospitals(List<Long> hospitalIds, String keyword, SortOption sortOption) {
 
 
         BooleanBuilder search = new BooleanBuilder();
@@ -49,7 +52,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
 
 
 
-        List<HospitalDto> content = queryFactory
+        JPAQuery<HospitalDto> query = queryFactory
                 .select(Projections.constructor(HospitalDto.class,
                         hospital.id,
                         hospital.name,
@@ -61,21 +64,32 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
                         hospital.longitude
                         ))
                 .from(hospital)
-                .where(search )
-                .orderBy(sortOption == SortOption.ER_COUNT
-                        ? hospital.availableErCount.desc()
-                        : hospital.id.asc()  // 일단 기본으로 함
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(hospital.count())
-                .from(hospital)
                 .where(search);
 
+            if (sortOption == SortOption.ER_COUNT) {
+                query.orderBy(hospital.availableErCount.desc());
+            } else if (hospitalIds != null && !hospitalIds.isEmpty()) {
+                query.orderBy(builderFildOrder(hospitalIds).asc());
+            }
 
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+
+        // 페이징 없이 리스트로 전체 결과 반환
+        return query.fetch();
+    }
+
+
+
+    // 앞에서 거리순으로 받은 id 순서 유지해서 조회
+    private NumberExpression<Integer> builderFildOrder(List<Long> hospitalIds) {
+
+        String csv = hospitalIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        return Expressions.numberTemplate(
+                Integer.class,
+                "FIELD({0}, " + csv + ")",
+                hospital.id
+
+        );
     }
 }

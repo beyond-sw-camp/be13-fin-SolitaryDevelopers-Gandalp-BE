@@ -11,5 +11,5 @@ import java.util.List;
 public interface HospitalRepositoryCustom {
 
     // 가까운 병원 20곳 조회
-    Page<HospitalDto> searchNearbyHospitals(List<Long> hospitalIds, String keyword, SortOption sortOption, Pageable pageable);
+    List<HospitalDto> searchNearbyHospitals(List<Long> hospitalIds, String keyword, SortOption sortOption);
 }

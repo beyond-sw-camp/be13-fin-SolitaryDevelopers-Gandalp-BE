@@ -6,6 +6,7 @@ import com.gandalp.gandalp.hospital.domain.dto.ErCountUpdateDto;
 import com.gandalp.gandalp.hospital.domain.dto.GeoResponse;
 import com.gandalp.gandalp.hospital.domain.dto.HospitalDto;
 import com.gandalp.gandalp.hospital.domain.dto.HospitalErResponseDto;
+import com.gandalp.gandalp.hospital.domain.dto.RouteInfoDto;
 import com.gandalp.gandalp.hospital.domain.entity.ErStatistics;
 import com.gandalp.gandalp.hospital.domain.entity.Hospital;
 import com.gandalp.gandalp.hospital.domain.entity.SortOption;
@@ -16,19 +17,27 @@ import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.RouteMatcher;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.Map.Entry.comparingByValue;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -126,7 +135,7 @@ public class HospitalService {
     // 검색이 없으면 기본 현재 위치에서 가까운 순으로 응급실 20곳 조회
     // 거리순, 가용 병상 순
     // 검색을 하는 경우 주소, 병원 이름
-    public Page<HospitalDto> getNearestHospitals(double longitude, double latitude, String keyword, SortOption sortOption, Pageable pageable) {
+    public List<HospitalDto> getNearestHospitals(double longitude, double latitude, String keyword, SortOption sortOption ) {
 
         System.out.println("long "+ longitude+ " lan = "+ latitude);
 
@@ -156,8 +165,8 @@ public class HospitalService {
             System.out.println("destinations : "+ destinations);
 
             // 4) 네이버 Direction API 호출 (service=15, batch size 최대 25)
-            Map<Long, Double> roadDistances = naverDirectionClient.getRoadDistances(
-                    latitude, longitude,
+            Map<Long, RouteInfoDto> roadDistances = naverDirectionClient.getRoadDistances(
+                    longitude, latitude,
                     destinations
             );
 
@@ -166,19 +175,33 @@ public class HospitalService {
 
             // 5) 거리 순 정렬 후 상위 20개 ID 뽑기
             List<Long> top20Ids = roadDistances.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue())
+                    .sorted(comparingByValue(Comparator.comparingDouble(RouteInfoDto::getDistanceKm)))
                     .limit(20)
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
 
-            System.out.println(top20Ids.toString());
-            // 6) 최종적으로 거리/검색/정렬 조건을 적용해 JPA로 조회
+            System.out.println(top20Ids);
+            // 6) 거리/검색/정렬 조건을 적용해 JPA로 조회
 
-            Page<HospitalDto> page = hospitalRepository.searchNearbyHospitals(top20Ids, keyword, sortOption, pageable);
+        IntStream.range(0, top20Ids.size()).forEach(i -> {
+            Long id = top20Ids.get(i);
+            double dist = roadDistances.get(id).getDistanceKm();
+            log.debug("순위 {} → 병원ID: {}, 거리: {}km", i+1, id, dist);
+        });
+
+            List<HospitalDto> list = hospitalRepository.searchNearbyHospitals(top20Ids, keyword, sortOption);
 
 
+            // 7 ) 조회한 병원 List에 거리, 시간 넣어줌
 
-        return page;
+        for(HospitalDto h : list) {
+            RouteInfoDto info = roadDistances.getOrDefault(h.getId(), RouteInfoDto.empty());
+            h.setDistanceKm(info.getDistanceKm());
+            h.setDurationSec(info.getDurationSec());
+        }
+
+
+        return list;
     }
 
 

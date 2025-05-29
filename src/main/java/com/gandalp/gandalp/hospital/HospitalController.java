@@ -46,15 +46,14 @@ public class HospitalController {
             @RequestParam double lat,
             @RequestParam double lon, // 현재 위치
             @RequestParam SortOption sortOption,
-            @RequestParam(required = false) String keyword,
-            @PageableDefault(size = 10, page = 0) Pageable pageable ) {
+            @RequestParam(required = false) String keyword ){
 
 //        geoCodingService.convertAllHospitalAddressToGeo();
 
-        Page<HospitalDto> hospitalList = null;
+        List<HospitalDto> hospitalList = null;
 
         try {
-            hospitalList = hospitalService.getNearestHospitals(lon, lat, keyword, sortOption, pageable);
+            hospitalList = hospitalService.getNearestHospitals(lon, lat, keyword, sortOption);
 
         }catch (Exception e ){
             return ResponseEntity.badRequest().body(e.getMessage());

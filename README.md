@@ -483,6 +483,12 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <summary>근무 반영</summary>
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/8a53f3c1-fb71-430a-8461-6e476218a0eb" />      
         </details>
+        <summary>근무 통계 분석</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/1bed57e9-46cc-4257-b67e-79e9a9f7d09a" />      
+        </details>
+        <summary>근무 비율 분석</summary>
+        <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/2dd2a088-a563-4bd1-a654-6205a0eb134b" />      
+        </details>
     <summary>오프</summary>
         <details>
         <summary>오프 신청</summary>

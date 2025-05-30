@@ -502,6 +502,19 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <summary>댓글 삭제</summary>
         <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/f4600291-abc8-4e6b-aae4-f4a78faa7def" />
         </details>
+    <summary>공지사항</summary>
+        <details>
+        <summary>긴급 공지사항 생성</summary>
+        <img src="https://github.com/user-attachments/assets/59fd4a3d-ed76-42b6-8001-c9af24997bd9" alt="Image 1" width="1202" />
+        </details>
+        <details>
+        <summary>긴급 공지사항 삭제</summary>
+        <img src="https://github.com/user-attachments/assets/122ae7af-9a50-4db1-bb2a-fbedacffd712" alt="Image 2" width="1202" />
+        </details>
+        <details>
+        <summary>근무표 생성 후, 일반 공지사항 자동 생성</summary>
+        <img src="https://github.com/user-attachments/assets/d283b368-fcab-4840-9f66-192d70617b07" alt="Image 3" width="1202" />    
+        </details>
 </details>
 
 

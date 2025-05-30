@@ -214,6 +214,11 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/16829c2e-7c61-4259-a68c-89701a73d2b9" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a19fda12-6a11-4060-8e7d-dd9fcba46fb1" />       
         </details>
+        <details>
+        <summary>간호사 근무 통계</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a5ef9115-f20b-4dae-9548-2a8f53b8233a" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/bb099f8b-2105-48db-8360-f2ff4f63aa31" />       
+        </details>
     <summary>응급실</summary>
         <details>
         <summary>로그인한 간호사의 병원 정보 조회</summary>
@@ -427,6 +432,23 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 </details>
 <details>
 <summary>📄 UX/UI 테스트</summary>
+    <summary>관리자</summary>
+        <details>
+        <summary>회원 계정 생성</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/f0e886c9-4fbb-408b-af92-91487c39233d" />
+        </details>
+        <details>
+        <summary>회원 전체 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/f42b9e34-20d7-41b7-ae4a-b862c30f2107" />
+        </details>
+        <details>
+        <summary>회원 정보 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/cffafe71-ab01-4693-913f-9fbfe588baa1" />
+        </details>
+        <details>
+        <summary>회원 삭제</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/27f4f496-0963-4733-8521-2405116f63ba" />
+        </details>
     <summary>간호사</summary>
         <details>
         <summary>로그인 및 모든 간호사 조회 및 검색</summary>

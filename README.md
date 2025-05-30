@@ -217,6 +217,16 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a495bc72-d9f2-4dd6-bd24-4778fd288305" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a53dcc05-9661-4db2-83b1-873f212e35eb" />      
         </details>
+        <details>
+        <summary>현재 위치와 가까운 응급실 20개 조회</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/32d533da-87b4-4cd4-a5c2-f62550029562" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/f777252e-eaff-42e0-ba0c-5b46528837fb" />      
+        </details>
+        <details>
+        <summary>응급실 검색</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/b3a02e74-afde-47a8-889d-a9e85eea0ca8" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/8516f483-2ce4-4b00-8900-43dd91a84550" />      
+        </details>
     <summary>공지사항</summary>
         <details>
         <summary>일반 공지사항 조회</summary>

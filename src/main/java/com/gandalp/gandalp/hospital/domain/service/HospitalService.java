@@ -140,7 +140,7 @@ public class HospitalService {
         System.out.println("long "+ longitude+ " lan = "+ latitude);
 
             // 1) Redis Geo에서 반경 제한 없이 최단거리 후보 ID(최대 50개 정도 여유 있게) 조회
-            List<Long> candidateIds = hospitalGeoRedisRepository.findNearbyHospitalIds(latitude, longitude, 50);
+            List<Long> candidateIds = hospitalGeoRedisRepository.findNearbyHospitalIds(longitude, latitude, 50);
             System.out.println("redis list : "+ candidateIds);
             // 만약 후보가 없다면 빈 페이지 반환
             if (candidateIds.isEmpty()) {

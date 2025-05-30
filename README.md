@@ -44,13 +44,6 @@
 
 </details>
 
-<details>
-    <summary>
-        📃 프로그램 사양서 
-    </summary>
-    [프로그램 사양서 링크] : https://docs.google.com/spreadsheets/d/1tXAx7WOqBfwgyGEeHsoQufes3kPnKFZqR1X77kL-PhE/edit?gid=0#gid=0
-
-</details>
 
 
 <br>
@@ -121,6 +114,14 @@
 <details>
 <summary>📋 테이블 정의 명세서</summary>
 https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9p_Q/edit?gid=0#gid=0
+</details>
+
+<details>
+    <summary>
+        📃 프로그램 사양서 
+    </summary>
+    [프로그램 사양서 링크] : https://docs.google.com/spreadsheets/d/1tXAx7WOqBfwgyGEeHsoQufes3kPnKFZqR1X77kL-PhE/edit?gid=0#gid=0
+
 </details>
 
 <details>

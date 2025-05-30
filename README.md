@@ -581,6 +581,11 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <summary>응급실 병상 이용 시간대 분석 </summary>
         <img src="https://github.com/user-attachments/assets/78992416-3d06-4761-bfa0-b574ec1f08d7" alt="Image 1" width="1202" />
         </details>
+    <summary>병원</summary>
+        <details>
+        <summary>지도 병원 조회</summary>
+        <img src="https://github.com/user-attachments/assets/35907b50-621b-46f5-96dc-270fc4adccb3" />
+        </details>
 </details>
 
 

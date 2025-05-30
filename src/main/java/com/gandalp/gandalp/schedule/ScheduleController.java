@@ -311,6 +311,8 @@ public class ScheduleController {
             for(Long id : workScheduleIds) {
                 workScheduleResponseDtos.add(scheduleService.acceptWork(id));
             }
+
+
             return ResponseEntity.ok().body(workScheduleResponseDtos);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

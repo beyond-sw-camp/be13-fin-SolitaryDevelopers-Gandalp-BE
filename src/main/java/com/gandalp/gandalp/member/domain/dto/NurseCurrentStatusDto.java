@@ -22,6 +22,7 @@ public class NurseCurrentStatusDto {
 	public NurseCurrentStatusDto(Nurse nurse){
 		this.id = nurse.getId();
 		this.name = nurse.getName();
-		this.codeLabel = nurse.getWorkingStatus().toString();
+		this.codeLabel = String.valueOf(nurse.getWorkingStatus());
+
 	}
 }

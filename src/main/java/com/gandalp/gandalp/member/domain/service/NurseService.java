@@ -114,14 +114,11 @@ public class NurseService {
 
 
 		if(!passwordEncoder.matches(request.getPassword(), nurse.getPassword())){
-			new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
 
 
 		// 3. 근무 상태 수정
-
-
-
 		Status workingStatus = request.getWorkingStatus();
 
 		nurse.updateWorkingStatus(workingStatus);

@@ -19,4 +19,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 	List<Notice> findAllByCategoryAndCreatedAtBefore(NoticeCategory category, LocalDateTime limit);
 
 	List<Notice> findAllByCategory(NoticeCategory category);
+
+	boolean existsByContentAndCategoryAndDepartment(String content, NoticeCategory category, Department department);
+
 }

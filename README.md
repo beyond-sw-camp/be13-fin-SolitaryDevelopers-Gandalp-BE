@@ -421,6 +421,10 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <summary>간호사 삭제</summary>
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/145c143d-25f1-4bb1-b97f-fe53be2224a0" />
         </details>
+        <details>
+        <summary>간호사 근무 현황 수정</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/cf0402dc-dc7a-4c4a-8b1d-f09bc0955a47" />
+        </details>
     <summary>근무</summary>
         <details>
         <summary>근무표 자동 생성</summary>

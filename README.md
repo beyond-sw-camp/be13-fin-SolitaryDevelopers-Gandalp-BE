@@ -529,6 +529,11 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
         <summary>근무표 생성 후, 일반 공지사항 자동 생성</summary>
         <img src="https://github.com/user-attachments/assets/d283b368-fcab-4840-9f66-192d70617b07" alt="Image 3" width="1202" />    
         </details>
+    <summary>통계</summary>
+        <details>
+        <summary>응급실 병상 이용 시간대 분석 </summary>
+        <img src="https://github.com/user-attachments/assets/78992416-3d06-4761-bfa0-b574ec1f08d7" alt="Image 1" width="1202" />
+        </details>
 </details>
 
 

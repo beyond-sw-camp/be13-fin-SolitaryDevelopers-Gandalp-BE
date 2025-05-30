@@ -200,6 +200,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+    @Override
+    public Member loadMemberByToken(String token) {
+        if(!jwtTokenProvider.validateToken(token)) {
+            throw new IllegalArgumentException("토큰이 유효하지 않습니다.");
+        }
+
+        String accountId = jwtTokenProvider.getUserName(token);
+        return memberRepository.findByAccountId(accountId).orElseThrow(
+                () -> new UsernameNotFoundException("회원 정보를 찾을 수 없습니다."+ accountId)
+        );
+    }
+
 
 
 }

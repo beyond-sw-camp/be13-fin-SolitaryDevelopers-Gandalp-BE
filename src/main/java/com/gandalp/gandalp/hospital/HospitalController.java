@@ -56,11 +56,11 @@ public class HospitalController {
         try {
             hospitalList = hospitalService.getNearestHospitals(lon, lat, keyword, sortOption);
 
-
-            messagingTemplate.convertAndSendToUser(
-                    principal.getName(),
-                    "/queue/near-hospitals", hospitalList);
-
+//
+//            messagingTemplate.convertAndSendToUser(
+//                    principal.getName(),
+//                    "/queue/near-hospitals", hospitalList);
+//
 
         }catch (Exception e ){
             return ResponseEntity.badRequest().body(e.getMessage());

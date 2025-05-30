@@ -16,6 +16,8 @@ public interface AuthService {
     TokenResponseDto login(LoginRequestDto dto, HttpServletResponse response);
 
     void logout(String bearerToken);
+    
+    Member loadMemberByToken(String token); // 토큰으로 이름만 가져옴
 
     TokenResponseDto refresh(HttpServletRequest request);
 

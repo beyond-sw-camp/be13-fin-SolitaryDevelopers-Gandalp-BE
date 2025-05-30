@@ -37,7 +37,7 @@ public class HospitalGeoRedisRepositoryImpl implements HospitalGeoRedisRepositor
 
     // redis에서 가까운 병원 id 후보 50개 조회
     @Override
-    public List<Long> findNearbyHospitalIds(double latitude, double longitude, int count){
+    public List<Long> findNearbyHospitalIds(double longitude, double latitude, int count){
         log.info("▶ findNearbyHospitalIds 호출: 위도={}, 경도={}, limit={}", latitude, longitude, count);
 
         // 1. 반경을 조금씩 늘려서 조회

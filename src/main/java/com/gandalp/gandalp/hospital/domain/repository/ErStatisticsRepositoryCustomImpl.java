@@ -51,7 +51,7 @@ public class ErStatisticsRepositoryCustomImpl implements ErStatisticsRepositoryC
 
         List<ErStatisticsResponseDto> result = queryFactory.select(Projections.constructor(ErStatisticsResponseDto.class,
 
-                erStatistics.id,
+                erStatistics.hospital.id,
                 erStatistics.year,
                 erStatistics.month,
                 erStatistics.day,

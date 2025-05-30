@@ -9,17 +9,15 @@ import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.entity.NurseStatistics;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.member.domain.repository.NurseStatisticsRepository;
+import com.gandalp.gandalp.notice.entity.Notice;
+import com.gandalp.gandalp.notice.entity.NoticeCategory;
+import com.gandalp.gandalp.notice.repository.NoticeRepository;
 import com.gandalp.gandalp.openAi.ScheduleResult;
 import com.gandalp.gandalp.schedule.domain.dto.*;
-import com.gandalp.gandalp.schedule.domain.entity.Category;
-import com.gandalp.gandalp.schedule.domain.entity.Schedule;
-import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
-import com.gandalp.gandalp.schedule.domain.entity.TempCategory;
-import com.gandalp.gandalp.schedule.domain.entity.Work;
+import com.gandalp.gandalp.schedule.domain.entity.*;
 import com.gandalp.gandalp.schedule.domain.repository.ScheduleRepository;
 import com.gandalp.gandalp.schedule.domain.repository.ScheduleTempRepository;
 import com.gandalp.gandalp.schedule.domain.repository.SurgeryScheduleRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -51,6 +49,7 @@ public class ScheduleService {
     private final SurgeryScheduleRepository surgeryScheduleRepository;
     private final NurseStatisticsRepository nurseStatisticsRepository;
     private final AuthService authService;
+    private final NoticeRepository noticeRepository;
 
     public OffScheduleTempResponseDto createOffSchecule(OffScheduleRequestDto scheduleRequestDto) {
         Optional<Nurse> nurseOpt = nurseRepository.findByEmail(scheduleRequestDto.getEmail());
@@ -588,6 +587,17 @@ public class ScheduleService {
                     .endTime(work.getEndTime())
                     .updatedAt(workTemp.get().getUpdatedAt())
                     .build();
+
+            int month = work.getStartTime().getMonthValue();
+
+            Notice notice = Notice.builder()
+                    .category(NoticeCategory.GENERAL)
+                    .content(String.format("%d월 근무표 생성", month))
+                    .department(work.getNurse().getDepartment())
+                    .build();
+
+            if ( !noticeRepository.existsByContentAndCategoryAndDepartment(notice.getContent(), notice.getCategory(), notice.getDepartment()) )
+                noticeRepository.save(notice);
 
             return scheduleResponseDto;
 

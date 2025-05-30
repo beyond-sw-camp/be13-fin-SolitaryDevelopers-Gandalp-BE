@@ -185,14 +185,9 @@ public class NurseController {
     public ResponseEntity<?> updateNurseStatus(
             @RequestBody NurseStatusUpdateDto request) {
         NurseCurrentStatusDto nurseStatus = null;
-
+        System.out.println(" nurseStatusUpdateDto : " + request.toString());
         try {
             nurseStatus = nurseService.updateNurseStatus(request);
-
-            // 모든 사용자에게 변경된 전체 리스트를 push
-            List<NurseCurrentStatusDto> statusList = nurseService.getNurseStatus();
-
-
         }catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
 

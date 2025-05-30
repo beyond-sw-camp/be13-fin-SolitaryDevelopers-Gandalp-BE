@@ -227,6 +227,11 @@ https://docs.google.com/spreadsheets/d/1F4ceqJwuPZzXLIOu3IjL5Qlj_13gn2_dcEDAObE9
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/b3a02e74-afde-47a8-889d-a9e85eea0ca8" />
         <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/8516f483-2ce4-4b00-8900-43dd91a84550" />      
         </details>
+        <details>
+        <summary>응급실 병상 이용 시간대 분석</summary>
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/28b1402d-da00-47db-9120-f52c7e5b2c3d" />
+        <img width="1291" alt="Image" src="https://github.com/user-attachments/assets/a556c7e3-d1e9-498b-99ef-24b7f617e3a2" />      
+        </details>
     <summary>공지사항</summary>
         <details>
         <summary>일반 공지사항 조회</summary>

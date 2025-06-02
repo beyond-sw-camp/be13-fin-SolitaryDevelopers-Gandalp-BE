@@ -45,7 +45,7 @@ public class HospitalService {
 
     private final HospitalRepository hospitalRepository;
     private final HospitalGeoRedisRepository hospitalGeoRedisRepository;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final NaverGeoClient naverGeoClient;
     private final NaverDirectionClient naverDirectionClient;
     private final ErStatisticsRepository erStatisticsRepository;
@@ -117,20 +117,21 @@ public class HospitalService {
     }
 
 
-    // 병원 좌표 갱신 ( 최초 1회 또는 주소 수정 시 )
-    // 병원 추가나 주소 수정 api가 있는 경우
-    public void updateGeoPointFroAllHospitals() {
-        List<Hospital> hospitals = hospitalRepository.findAll();
-        for (Hospital hospital : hospitals) {
-            GeoResponse geo = naverGeoClient.getGeoPointFromAddress((hospital.getAddress()));
-
-            hospitalGeoRedisRepository.saveHospitalLocation(
-                    hospital.getId(),
-                    geo.getLongitude(),
-                    geo.getLatitude()
-            );
-        }
-    }
+    // 병원 좌표 갱신 ( 최초 1회 또는 주소 수정 시 ) 
+    // - geocoding 서비스에 있고 application 실행시 자동으로 좌표 없는 애들 변환해서 넣게 함
+    
+//    public void updateGeoPointFroAllHospitals() {
+//        List<Hospital> hospitals = hospitalRepository.findAll();
+//        for (Hospital hospital : hospitals) {
+//            GeoResponse geo = naverGeoClient.getGeoPointFromAddress((hospital.getAddress()));
+//
+//            hospitalGeoRedisRepository.saveHospitalLocation(
+//                    hospital.getId(),
+//                    geo.getLongitude(),
+//                    geo.getLatitude()
+//            );
+//        }
+//    }
 
     // 검색이 없으면 기본 현재 위치에서 가까운 순으로 응급실 20곳 조회
     // 거리순, 가용 병상 순
@@ -148,7 +149,7 @@ public class HospitalService {
             }
 
 
-            // 위에서 후보로 조회한 각 병원 ID에 대해 Redis에 저장한 위·경도 정보를 한꺼번에 조회
+            // 위에서 후보로 조회한 각 병원 ID의 위·경도 정보를 조회
             List<Point> points = hospitalGeoRedisRepository.findLocationsByIds(candidateIds);
 
             System.out.println("points : "+ points);

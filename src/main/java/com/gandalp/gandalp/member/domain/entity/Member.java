@@ -52,6 +52,8 @@ public class Member extends BaseEntity {
 
 	public void update(MemberUpdateDto updateDto){
 		this.accountId = updateDto.getAccountId();
-		this.password = updateDto.getPassword();
+		if (updateDto.getPassword() != null) {
+			this.password = updateDto.getPassword();
+		}
 	}
 }

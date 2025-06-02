@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class DirectionCacheService {
 
     // cacheable은 같은 클래스 내부에서 자기 메서드 호출 시 동작하지 않아서
-    // 별도 빈으로 분리
+    // 요청은 별도 빈으로 분리
 
     @Value("${naver.map.client-id}")
     private String clientId;
@@ -56,12 +56,34 @@ public class DirectionCacheService {
     )
     public RouteInfoDto getDistanceForPair(double longitude, double latitude, DestinationDto dest) {
 
+        // 전달받은 좌표를 반올림 (소수점 6자리)
+        // double은 타입을 소수점 자릿수를 정확하게 반올림하기 어려줘 캐시 키로 쓰면 일관성이 깨질 수 있음
+        // BigDecimal은 10진법으로 정확하게 소수점 반올림 관리 가능
+        BigDecimal lonBd = BigDecimal.valueOf(longitude).setScale(5, RoundingMode.HALF_UP);
+        BigDecimal latBd = BigDecimal.valueOf(latitude).setScale(5, RoundingMode.HALF_UP);
+        BigDecimal destLonBd = BigDecimal.valueOf(dest.getLongitude()).setScale(6, RoundingMode.HALF_UP);
+        BigDecimal destLatBd = BigDecimal.valueOf(dest.getLatitude()).setScale(6, RoundingMode.HALF_UP);
+
+
+        // 반올림된 좌표를 문자열로 바꿈
+        String lonRoundedStr      = lonBd.toPlainString();
+        String latRoundedStr      = latBd.toPlainString();
+        String destLonRoundedStr  = destLonBd.toPlainString();
+        String destLatRoundedStr  = destLatBd.toPlainString();
+
+
         // redis 캐시에 없으면 로그 찍힘
         log.info("▶ [캐시 미스] origin={}→dest={}", longitude + "," + latitude,
                 dest.getLongitude() + "," + dest.getLatitude());
+        // redis 캐시에만 반올림된 값을 저장하는게 아니라 요청 보낼 때도 반올림한 값으로 보내야함
+//        String start = longitude + "," + latitude;
+//        String goal  = dest.getLongitude() + "," + dest.getLatitude();
 
-        String start = longitude + "," + latitude;
-        String goal  = dest.getLongitude() + "," + dest.getLatitude();
+        // 반올림된 좌표로 api 호출
+        String start = lonRoundedStr + "," + latRoundedStr;
+        String goal = destLonRoundedStr + "," + destLatRoundedStr;
+
+
         String url   = "https://maps.apigw.ntruss.com/map-direction-15/v1/driving"
                 + "?start=" + URLEncoder.encode(start, StandardCharsets.UTF_8)
                 + "&goal="  + URLEncoder.encode(goal,  StandardCharsets.UTF_8)
@@ -111,10 +133,10 @@ public class DirectionCacheService {
     // 위에 표현식에서 사용함
     public static String makeCacheKey(double lon, double lat, double destLon, double destLat) {
 
-        BigDecimal lonBd = BigDecimal.valueOf(lon).setScale(4, RoundingMode.HALF_UP);
-        BigDecimal latBd = BigDecimal.valueOf(lat).setScale(4, RoundingMode.HALF_UP);
-        BigDecimal destLonBd = BigDecimal.valueOf(destLon).setScale(4, RoundingMode.HALF_UP);
-        BigDecimal destLatBd = BigDecimal.valueOf(destLat).setScale(4, RoundingMode.HALF_UP);
+        BigDecimal lonBd = BigDecimal.valueOf(lon).setScale(5, RoundingMode.HALF_UP);
+        BigDecimal latBd = BigDecimal.valueOf(lat).setScale(5, RoundingMode.HALF_UP);
+        BigDecimal destLonBd = BigDecimal.valueOf(destLon).setScale(5, RoundingMode.HALF_UP);
+        BigDecimal destLatBd = BigDecimal.valueOf(destLat).setScale(5, RoundingMode.HALF_UP);
         return lonBd + "," + latBd + ":" + destLonBd + "," + destLatBd;
     }
 

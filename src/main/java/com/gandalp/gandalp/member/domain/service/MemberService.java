@@ -66,7 +66,8 @@ public class MemberService {
     @Transactional
     public MemberResponseDto updateMember(Long memberId, MemberUpdateDto updateDto){
 
-        String password = updateDto.getPassword();
+        // 넘어온 비밀번호
+        String prePassword = updateDto.getPassword();
 
         // 1. member 조회
         Member member = memberRepository.findById(memberId).orElseThrow(
@@ -76,9 +77,15 @@ public class MemberService {
         Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("member",String.valueOf(member.getType()));
         if(codeLabel.isEmpty()) throw new RuntimeException("codeLabel is empty");
 
-        String encodedPassword = passwordEncoder.encode(password);
 
-        updateDto.setPassword(encodedPassword);
+        if(prePassword !=null && !prePassword.isBlank()) {
+
+            String encodedPassword = passwordEncoder.encode(prePassword);
+            updateDto.setPassword(encodedPassword);
+        }else{
+            updateDto.setPassword(null); // 기존 비밀번호 덮어쓰지 않게 함
+        }
+
 
         // 2. update
         member.update(updateDto);

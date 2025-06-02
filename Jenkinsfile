@@ -9,12 +9,19 @@ pipeline {
         CONTAINER_NAME = 'gandalpContaioner'
         AWS_REGION = 'ap-northeast-2'
         ASG_NAME = 'gandalp-asg'
+        APP_SECRET_YML = credentials('application-secret.yml') // 시크릿 등록한 ID
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'develop', credentialsId: 'github-token', url: 'git@github.com:beyond-sw-camp/be13-fin-SolitaryDevelopers-Gandalp-BE.git'
+            }
+        }
+
+        stage('Inject Secret') {
+            steps {
+                writeFile file: 'application-secret.yml', text: "${APP_SECRET_YML}"
             }
         }
 

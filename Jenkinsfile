@@ -21,7 +21,8 @@ pipeline {
 
         stage('Inject Secret') {
             steps {
-                 sh 'cp $SECRET_YML_FILE src/main/resources/application-prod.yml'
+                 sh "cp $SECRET_YML_FILE src/main/resources/application-prod.yml"
+                 sh "cat src/main/resources/application-prod.yml"
             }
         }
 

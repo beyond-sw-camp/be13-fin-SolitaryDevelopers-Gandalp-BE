@@ -66,7 +66,7 @@ public class CalenderController {
         return ResponseEntity.ok(personalScheduleResponseDtos);
     }
 
-    @Operation(summary = "모든 간호사 일정 조회", description = "모든 간호사의 일정을 조회합니다.")
+    @Operation(summary = "모든 간호사 개인 일정 조회", description = "모든 간호사의 일정을 조회합니다.")
     @GetMapping("/calendars")
     public ResponseEntity<List<PersonalScheduleResponseDto>> getSchedules() {
 

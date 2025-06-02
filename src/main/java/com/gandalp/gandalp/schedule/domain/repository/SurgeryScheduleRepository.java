@@ -21,4 +21,7 @@ public interface SurgeryScheduleRepository extends JpaRepository<SurgerySchedule
                                                    @Param("startTime") LocalDateTime startTime,
                                                    @Param("endTime") LocalDateTime endTime);
 
+    @Query("SELECT s FROM SurgerySchedule s WHERE s.room.id IN :roomIds")
+    List<SurgerySchedule> findByRoomIdIn(@Param("roomIds") List<Long> roomIds);
+
 }

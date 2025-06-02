@@ -98,3 +98,7 @@ processResources {
 		include '**/*.yml'
 	}
 }
+
+tasks.named('processResources') {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

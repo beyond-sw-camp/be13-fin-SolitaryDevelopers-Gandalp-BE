@@ -30,14 +30,14 @@ public class GeoCodingService {
 
         for(Hospital hospital: hospitals){
 
-            // 여기서 오류
+
             GeoResponse geo = naverGeoClient.getGeoPointFromAddress(hospital.getAddress());
 
             if (geo != null) {
-
+                // local db에 저장
                 hospital.updateGeoCode(geo.getLatitude(), geo.getLongitude());
 
-
+                // redis에 저장
                 // Redis 저장을 hospitalGeoRedisRepository에서 하게 함
                 hospitalGeoRedisRepository.saveHospitalLocation(
                         hospital.getId(),
@@ -51,4 +51,21 @@ public class GeoCodingService {
         System.out.println(
                 "GeoCodingService: 신규 병원 " + hospitals.size() +" 건 좌표 DB/Redis 저장 완료");
     }
+        // 위는 처음에 db에 좌표가 없는 경우 조회해서 넣는거고 아래는 좌표가 있는 애들을 redis에 저장
+//        List<Hospital> allHospitals = hospitalRepository.findAll();
+//
+//        for (Hospital h : allHospitals) {
+//            // 이미 DB에 위/경도 정보가 있다고 가정 → 바로 Redis에 저장
+//            // (만약 위/경도 값이 null일 가능성이 있다면, null 체크 후 Geocoding 로직을 추가하세요)
+//            if (h.getLatitude() != null && h.getLongitude() != null) {
+//                hospitalGeoRedisRepository.saveHospitalLocation(
+//                        h.getId(),
+//                        h.getLongitude(),
+//                        h.getLatitude()
+//                );
+//            }
+//        }
+//
+//        System.out.println("GeoCodingService: Redis-Geo에 " + allHospitals.size() + "건 로드 완료");
+//    }
 }

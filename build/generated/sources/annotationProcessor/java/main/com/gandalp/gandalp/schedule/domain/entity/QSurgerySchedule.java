@@ -64,7 +64,7 @@ public class QSurgerySchedule extends EntityPathBase<SurgerySchedule> {
 
     public QSurgerySchedule(Class<? extends SurgerySchedule> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.room = inits.isInitialized("room") ? new com.gandalp.gandalp.hospital.domain.entity.QRoom(forProperty("room")) : null;
+        this.room = inits.isInitialized("room") ? new com.gandalp.gandalp.hospital.domain.entity.QRoom(forProperty("room"), inits.get("room")) : null;
     }
 
 }

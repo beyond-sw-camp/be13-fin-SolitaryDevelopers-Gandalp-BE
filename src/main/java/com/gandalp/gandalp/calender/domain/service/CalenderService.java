@@ -221,8 +221,16 @@ public class CalenderService {
     // join fetch 고려
     public List<OrsResponseDto> getOrs() {
 
-        List<OrsResponseDto> orsResponseDtos = surgeryScheduleRepository.findAll().stream().map(s -> {
-                    List<Long> nurseIds = surgeryNurseRepository.findBySurgeryScheduleId(s.getId()).stream().map(sn -> sn.getNurse().getId()).collect(Collectors.toList());
+        Department department = authService.getLoginMember().getDepartment();
+        Long hospitalId = department.getHospital().getId();
+
+        List<Long> roomIds = roomRepository.findByHospitalId(hospitalId).stream().map(r -> r.getId()).collect(Collectors.toList());
+
+        List<OrsResponseDto> orsResponseDtos = surgeryScheduleRepository.findByRoomIdIn(roomIds).stream().map(s -> {
+            List<Long> nurseIds = surgeryNurseRepository.findBySurgeryScheduleId(s.getId()).stream().map(sn -> sn.getNurse().getId()).collect(Collectors.toList());
+
+//        List<OrsResponseDto> orsResponseDtos = surgeryScheduleRepository.findAll().stream().map(s -> {
+//                    List<Long> nurseIds = surgeryNurseRepository.findBySurgeryScheduleId(s.getId()).stream().map(sn -> sn.getNurse().getId()).collect(Collectors.toList());
 
                     return OrsResponseDto.builder()
                             .surgeryScheduleId(s.getId())
@@ -239,7 +247,12 @@ public class CalenderService {
 
     public List<RoomResponseDto> getRooms() {
 
-        List<Room> rooms = roomRepository.findAll();
+        Department department = authService.getLoginMember().getDepartment();
+        Long hospitalId = department.getHospital().getId();
+
+        List<Room> rooms = roomRepository.findByHospitalId(hospitalId);
+
+//        List<Room> rooms = roomRepository.findAll();
 
         List<RoomResponseDto> roomResponseDtos = rooms.stream().map(r ->
                 RoomResponseDto.builder()

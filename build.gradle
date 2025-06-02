@@ -92,3 +92,9 @@ dependencyManagement {
 		mavenBom "com.vmware.tanzu.springcloudgateway.extensions:extensions-bom:$tanzuScgExtensionsVersion"
 	}
 }
+
+processResources {
+	from("src/main/resources") {
+		include '**/*.yml'
+	}
+}

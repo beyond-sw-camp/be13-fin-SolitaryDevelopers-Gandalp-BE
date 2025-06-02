@@ -9,7 +9,7 @@ pipeline {
         CONTAINER_NAME = 'gandalpContaioner'
         AWS_REGION = 'ap-northeast-2'
         ASG_NAME = 'gandalp-asg'
-        APP_SECRET_YML = credentials('application-secret.yml') // 시크릿 등록한 ID
+        SECRET_YML_FILE = credentials('application-secret.yml') // File 타입일 경우
     }
 
     stages {
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Inject Secret') {
             steps {
-                writeFile file: 'application-secret.yml', text: "${APP_SECRET_YML}"
+                 sh 'cp $SECRET_YML_FILE src/main/resources/application-prod.yml'
             }
         }
 

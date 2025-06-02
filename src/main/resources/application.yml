@@ -24,7 +24,7 @@ spring:
     active: local
 
   config:
-    import: "classpath:application-secret.yml"
+    import: "optional:file:./application-secret.yml"
 
   sql:
     init:

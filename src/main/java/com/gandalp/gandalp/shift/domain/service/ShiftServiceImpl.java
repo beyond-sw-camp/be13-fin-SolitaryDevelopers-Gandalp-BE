@@ -100,7 +100,6 @@ public class ShiftServiceImpl implements ShiftService {
             throw new IllegalArgumentException("알 수 없는 교대 타입입니다.");
         }
 
-        // 이하 기존 코드 유지
         Schedule boardSchedule = scheduleRepository.findByNurseIdAndStartTimeLessThanEqualAndEndTimeGreaterThan(
                 boardNurse.getId(), boardShift.startTime, boardShift.startTime
         ).orElseThrow(() -> new RuntimeException("게시글 작성자의 일정이 없습니다."));
@@ -188,27 +187,23 @@ public class ShiftServiceImpl implements ShiftService {
     // 교대 요청 글 기본 조회
     @Override
     public Page<ShiftResponseDto> getAll(Pageable pageable) {
-        // 1. 로그인 사용자 조회
         Member member = authService.getLoginMember();
         Department department = member.getDepartment();
 
-        // 2. 해당 부서의 게시글 페이징 조회
-        Page<Board> boardPage = shiftRepository.findAllByDepartment(department, pageable);
-
-        // 3. Board → ShiftResponseDto 변환 (boardStatusLabel 포함)
-        Page<ShiftResponseDto> dtoPage = boardPage.map(this::toDto);
-
-        return dtoPage;
+        // JPA 기본 메서드 → 커스텀 QueryDSL 메서드로 변경
+        return shiftRepository.getAllByDepartment(department, pageable);
     }
 
 
     // 교대 요청 글 단건 상세 조회
     public ShiftDetailsResponseDto getShiftDetails(Long boardId) {
-        Board board = shiftRepository.findByIdWithComments(boardId)
-                .orElseThrow(() -> new RuntimeException("해당 글을 찾을 수 없습니다."));
+        Board board = commentRepository.findByIdWithCommentsAndNurse(boardId)
+                .orElseThrow(() -> new RuntimeException("해당 글이 없습니다."));
+
 
         List<CommentResponseDto> commentDtos = board.getComments().stream()
-                .map(comment -> new CommentResponseDto(comment.getId(), comment.getContent(), comment.getCreatedAt()))
+                .map(CommentResponseDto::new)
+//                .map(comment -> new CommentResponseDto(comment.getId(), comment.getContent(), comment.getCreatedAt()))
                 .collect(Collectors.toList());
 
         Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("board_status", String.valueOf(board.getBoardStatus()));
@@ -217,14 +212,39 @@ public class ShiftServiceImpl implements ShiftService {
             throw new RuntimeException("codeLabel is empty");
         }
 
-        return new ShiftDetailsResponseDto(
-                board.getId(),
-                board.getContent(),
-                codeLabel.get(),
-                commentDtos,
-                board.getNurse() != null ? board.getNurse().getId() : null
-        );
+        // nurseName 세팅 추가
+        return ShiftDetailsResponseDto.builder()
+                .boardId(board.getId())
+                .content(board.getContent())
+                .codeLabel(codeLabel.get())
+                .comments(commentDtos)
+                .nurseId(board.getNurse() != null ? board.getNurse().getId() : null)
+                .nurseName(board.getNurse() != null ? board.getNurse().getName() : null) // ← 이 부분!
+                .build();
     }
+
+//    public ShiftDetailsResponseDto getShiftDetails(Long boardId) {
+//        Board board = shiftRepository.findByIdWithComments(boardId)
+//                .orElseThrow(() -> new RuntimeException("해당 글을 찾을 수 없습니다."));
+//
+//        List<CommentResponseDto> commentDtos = board.getComments().stream()
+//                .map(comment -> new CommentResponseDto(comment.getId(), comment.getContent(), comment.getCreatedAt()))
+//                .collect(Collectors.toList());
+//
+//        Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("board_status", String.valueOf(board.getBoardStatus()));
+//
+//        if(codeLabel.isEmpty()) {
+//            throw new RuntimeException("codeLabel is empty");
+//        }
+//
+//        return new ShiftDetailsResponseDto(
+//                board.getId(),
+//                board.getContent(),
+//                codeLabel.get(),
+//                commentDtos,
+//                board.getNurse() != null ? board.getNurse().getId() : null
+//        );
+//    }
 
 
     // 교대 요청 글 D

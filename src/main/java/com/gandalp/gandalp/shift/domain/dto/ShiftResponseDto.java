@@ -29,8 +29,12 @@ public class ShiftResponseDto {
     private Long departmentId;
     private String boardStatusLabel; // code_label
     private String content;
+    private CommonCode codeLabel;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<CommentResponseDto> comments; // 엔티티 대신 DTO
+    private String nurseName;
+
 
     public ShiftResponseDto(Board board, String codeLable) {
         this.boardId = board.getId();
@@ -38,15 +42,28 @@ public class ShiftResponseDto {
         this.memberId = board.getMember() != null ? board.getMember().getId() : null;
         this.departmentId = board.getDepartment() != null ? board.getDepartment().getId() : null;
         this.boardStatusLabel = codeLable;
-        this.updatedAt = board.getUpdatedAt();
+        this.createdAt = board.getCreatedAt();
         this.comments = board.getComments().stream().map(CommentResponseDto::new).collect(Collectors.toList());
+        this.nurseName = board.getNurse() != null ? board.getNurse().getName() : null;
     }
 
-    public ShiftResponseDto(Long boardId, String boardStatusLabel, String content, LocalDateTime updatedAt) {
+    //    public ShiftResponseDto(Board board, String codeLabel) {
+//        this.boardId = board.getId();
+//        this.content = board.getContent();
+//        this.nurseId = board.getNurse() != null ? board.getNurse().getId() : null;
+//        this.nurseName = board.getNurse() != null ? board.getNurse().getName() : null; // 여기!
+//        this.boardStatusLabel = codeLabel;
+//        this.updatedAt = board.getUpdatedAt();
+//    }
+
+    // 기본, 검색 조회 QueryDSL용 생성자 (파라미터 순서와 타입 반드시 맞출 것)
+    public ShiftResponseDto(Long boardId, String boardStatusLabel, String content, LocalDateTime createdAt, String nurseName) {
+
         this.boardId = boardId;
         this.boardStatusLabel = boardStatusLabel;
         this.content = content;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.nurseName = nurseName;
     }
 
 

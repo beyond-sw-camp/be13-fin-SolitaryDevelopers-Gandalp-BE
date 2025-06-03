@@ -46,10 +46,11 @@ public class AuthServiceImpl implements AuthService {
     private final HospitalRepository hospitalRepository;
 
     @Override
-    @Transactional
-    public void join(JoinRequestDto dto) {
+    @Transactional   // 해당 병원 관리자가 할 수 있는 거 ~~
+    public void join(JoinRequestDto dto, Hospital hospital) {
         String accountId = dto.getAccountId();
         String password = dto.getPassword();
+
 
         // 아이디 중복 체크
         if (memberRepository.findByAccountId(accountId).isPresent()) {
@@ -60,18 +61,9 @@ public class AuthServiceImpl implements AuthService {
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(password);
 
-        Hospital hospital = null;
-        Department department = null;
-
-
-        // 응급대원이 아닌 경우  병원과 부서 조회
-        if (dto.getType() != Type.PARAMEDIC) {
-            // paramedic이 아니면 조회
-            hospital = hospitalRepository.findByName(dto.getHospital())
-                    .orElseThrow(() -> new EntityNotFoundException("해당하는 병원이 없습니다."));
-            department = departmentRepository.findByNameAndHospital(dto.getDepartment(), hospital)
+        Department department = departmentRepository.findByNameAndHospital(dto.getDepartment(), hospital)
                     .orElseThrow(() -> new IllegalArgumentException("해당하는 부서가 없습니다."));
-        }
+
 
         Member member = Member.builder()
                 .accountId(accountId)

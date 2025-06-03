@@ -297,6 +297,7 @@ public class ScheduleController {
     public ResponseEntity<?> acceptWork(@PathVariable("work-schedule-id") Long workScheduleId) {
         try {
             ScheduleResponseDto workScheduleResponseDto = scheduleService.acceptWork(workScheduleId);
+
             return ResponseEntity.ok().body(workScheduleResponseDto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

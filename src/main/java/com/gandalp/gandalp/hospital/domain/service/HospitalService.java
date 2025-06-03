@@ -1,15 +1,18 @@
 package com.gandalp.gandalp.hospital.domain.service;
 
 import com.gandalp.gandalp.auth.model.service.AuthService;
+import com.gandalp.gandalp.hospital.domain.dto.DepartmentDto;
 import com.gandalp.gandalp.hospital.domain.dto.DestinationDto;
 import com.gandalp.gandalp.hospital.domain.dto.ErCountUpdateDto;
 import com.gandalp.gandalp.hospital.domain.dto.GeoResponse;
 import com.gandalp.gandalp.hospital.domain.dto.HospitalDto;
 import com.gandalp.gandalp.hospital.domain.dto.HospitalErResponseDto;
 import com.gandalp.gandalp.hospital.domain.dto.RouteInfoDto;
+import com.gandalp.gandalp.hospital.domain.entity.Department;
 import com.gandalp.gandalp.hospital.domain.entity.ErStatistics;
 import com.gandalp.gandalp.hospital.domain.entity.Hospital;
 import com.gandalp.gandalp.hospital.domain.entity.SortOption;
+import com.gandalp.gandalp.hospital.domain.repository.DepartmentRepository;
 import com.gandalp.gandalp.hospital.domain.repository.ErStatisticsRepository;
 import com.gandalp.gandalp.hospital.domain.repository.HospitalGeoRedisRepository;
 import com.gandalp.gandalp.hospital.domain.repository.HospitalRepository;
@@ -53,8 +56,7 @@ public class HospitalService {
     private static final String GEO_KEY = "hospital:geo";
     private final ErStatisticsService erStatisticsService;
     private final AuthService authService;
-
-
+    private final DepartmentRepository departmentRepository;
 
     // 병원 단 건 조회
     public HospitalDto getOneHospital( ) {
@@ -87,27 +89,21 @@ public class HospitalService {
 //        );
 //
 
-
-        int pastErCount = hospital.getAvailableErCount();
         int nowErCount = hospital.updateAvailableErCount(updateDto.getAvailableErCount());
 
-        int diff = pastErCount - nowErCount;
-        if ( diff > 0 ) {
 
-            // 과거 ErCount 가 현재 ErCount 보다 크면, 응급실 입원 환자수 존재 -> ErStatistics 에 넣기
-
-            LocalDateTime now = LocalDateTime.now();
-            ErStatistics statistics = ErStatistics.builder()
+        LocalDateTime now = LocalDateTime.now();
+        ErStatistics statistics = ErStatistics.builder()
                                             .hospital(hospital)
                                             .year(now.getYear())
                                             .month(now.getMonthValue())
                                             .day(now.getDayOfMonth())
                                             .hour(now.getHour())
-                                            .patients(diff)
+                                            .patients(nowErCount)
                                             .build();
 
-            erStatisticsRepository.save(statistics);
-        }
+        erStatisticsRepository.save(statistics);
+
 
 
 
@@ -203,6 +199,23 @@ public class HospitalService {
 
 
         return list;
+    }
+
+    public List<DepartmentDto> getDepartments() {
+        Member loginMember = authService.getLoginMember();
+
+        Hospital hospital = loginMember.getHospital();
+
+        List<Department> list = departmentRepository.findByHospital(hospital);
+
+        return list.stream()
+            .map( department -> DepartmentDto.builder()
+                .id(department.getId())
+                .hospitalName(hospital.getName())
+                .departmentName(department.getName())
+                .build()
+            )
+            .collect(Collectors.toList());
     }
 
 

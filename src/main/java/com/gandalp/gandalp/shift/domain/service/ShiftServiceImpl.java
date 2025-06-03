@@ -10,6 +10,7 @@ import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.schedule.domain.entity.Schedule;
 import com.gandalp.gandalp.schedule.domain.repository.ScheduleRepository;
+import com.gandalp.gandalp.schedule.domain.service.ScheduleService;
 import com.gandalp.gandalp.shift.ScheduleValidator;
 import com.gandalp.gandalp.shift.domain.dto.CommentResponseDto;
 import com.gandalp.gandalp.shift.domain.dto.ShiftCreateRequestDto;
@@ -53,6 +54,7 @@ public class ShiftServiceImpl implements ShiftService {
     private final ScheduleValidator scheduleValidator;
     private final MailService mailService;
 
+    private final ScheduleService scheduleService;
 
     // 교대 요청 댓글 채택
     @Override
@@ -114,6 +116,10 @@ public class ShiftServiceImpl implements ShiftService {
 
         scheduleRepository.save(boardSchedule);
         scheduleRepository.save(commentSchedule);
+
+        scheduleService.recalculateCurrentMonthStatistics(boardSchedule.getStartTime(), boardSchedule.getNurse());
+        scheduleService.recalculateCurrentMonthStatistics(commentSchedule.getStartTime(), commentSchedule.getNurse());
+
 
         board.completeRequest();
         shiftRepository.save(board);

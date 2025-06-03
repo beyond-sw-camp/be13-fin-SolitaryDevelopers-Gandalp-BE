@@ -219,6 +219,10 @@ public class ScheduleService {
                 throw new RuntimeException("Code Label is Empty");
             }
 
+
+            recalculateCurrentMonthStatistics(schedule.getStartTime(), schedule.getNurse());
+
+
             ScheduleResponseDto offScheduleResponseDto = ScheduleResponseDto.builder()
                     .offScheduleId(schedule.getId())
                     .nurseId(schedule.getNurse().getId())
@@ -305,91 +309,67 @@ public class ScheduleService {
 
     }
 
+    @Transactional
+    public void recalculateCurrentMonthStatistics(LocalDateTime startDateTime, Nurse nurse){
 
 
-    // 매월 1일 간호사들의 근무 통계가 자동으로 업데이트됨
-    @Scheduled(cron = "0 0 0 1 * *")
-    public void autoUpdateNurseStatics(){
 
-        // 1. 모든 간호사들 조회
-        List<Nurse> allNurse = nurseRepository.findAll();
+        int year = startDateTime.getYear();
+        int month = startDateTime.getMonthValue();
 
-        // 업데이트할 날짜 계산
-        LocalDate now = LocalDate.now();
-
-        // 지난 달 가져오기
-        // ex) 1월이면 작년 12월 가져옴
-        int year = now.getMonthValue() == 1 ? now.getYear() -1 : now.getYear();
-        int month = now.getMonthValue() == 1? 12 : now.getMonthValue() -1;
-
-
-        // 통계 범위를 낼 기간 구하기 ex) 1 ~ 31 일
         LocalDateTime start = LocalDate.of(year, month, 1).atStartOfDay();
         LocalDateTime end = start.withDayOfMonth(start.toLocalDate().lengthOfMonth())
-        .withHour(23).withMinute(59).withSecond(59);
+            .withHour(23).withMinute(59).withSecond(59);
 
+        List<Schedule> schedules = scheduleRepository.findByNurseAndStartTimeBetween(nurse, start,
+            end);
 
-        // 모든 간호사의 스케줄 day, evening, night, off로 분리
-        for(Nurse nurse : allNurse){
+        int day = 0, evening = 0, night = 0, off = 0;
+        for (Schedule schedule: schedules){
 
-            Long nurseId = nurse.getId();
-            List<Schedule> schedules = scheduleRepository.findByNurseAndStartTimeBetween(nurse, start, end);
+            if (schedule.getCategory() == Category.WORKING && schedule.getStartTime()!= null){
 
-            int day = 0;
-            int evening = 0;
-            int night = 0;
-            int off = 0;
+                Work workShift = resolveShift(schedule.getStartTime().getHour());
 
-            for(Schedule schedule : schedules){
-                // 간호사 상태가 working네 start time이 존재하는 근무 기록을 가져옴
-                if(schedule.getCategory() == Category.WORKING && schedule.getStartTime() != null){
-
-                    Work workShift = resolveShift(schedule.getStartTime().getHour());
-                    switch (workShift) {
-                        case DAY -> day++;
-                        case EVENING -> evening++;
-                        case NIGHT -> night++;
-                    }
-                }else if(schedule.getCategory() == Category.ACCEPTED_OFF){
-                    off++;
+                switch (workShift) {
+                    case DAY -> day++;
+                    case EVENING -> evening++;
+                    case NIGHT -> night++;
                 }
             }
-
-            // 간호사 한달 수술 수 조회
-            int surgeryCount = surgeryScheduleRepository.countByNurseAndMonth(nurseId, start, end);
-
-            // 통계가 존재하면 업데이트( 서버 재시작되는 경우 등 스케줄러 실행됨)
-            // 없으면 통계 생성 ( year, month, nurse 넣어서 통계 만들기)
-            StaticsUpdateDto dto = StaticsUpdateDto.builder()
-                .year(year)
-                .month(month)
-                .dayCount(day)
-                .eveningCount(evening)
-                .nightCount(night)
-                .offCount(off)
-                .surgeryCount(surgeryCount)
-                .build();
-
-
-
-            // NurseStatics entity에 조회 후 업데이트
-            NurseStatistics statistics = nurseStatisticsRepository
-                .findByNurseIdAndYearAndMonth(nurse.getId(), year, month)
-                .orElseGet(() -> NurseStatistics.builder()
-                    .nurse(nurse)
-                    .year(year)
-                    .month(month)
-                    .build());
-
-            // 업데이트
-            statistics.updateStatic(dto);
-            nurseStatisticsRepository.save(statistics);
-
-
-
+            else if (schedule.getCategory() == Category.ACCEPTED_OFF){
+                off++;
+            }
         }
 
+
+        int surgeryCount = surgeryScheduleRepository.countByNurseAndMonth(nurse.getId(), start, end);
+
+        NurseStatistics statistics = nurseStatisticsRepository
+            .findByNurseIdAndYearAndMonth(nurse.getId(), year, month)
+            .orElseGet(() -> NurseStatistics.builder()
+                .nurse(nurse)
+                .year(year)
+                .month(month)
+                .build());
+
+        statistics.updateStatic(StaticsUpdateDto.builder()
+            .year(year)
+            .month(month)
+            .dayCount(day)
+            .eveningCount(evening)
+            .nightCount(night)
+            .offCount(off)
+            .surgeryCount(surgeryCount)
+            .build()
+        );
+
+        nurseStatisticsRepository.save(statistics);
+
     }
+
+
+
 
     private Work resolveShift(int hour) {
         if (hour >= 6 && hour < 14) return Work.DAY;
@@ -578,6 +558,7 @@ public class ScheduleService {
 
             scheduleTempRepository.deleteById(workTemp.get().getId());
 
+
             ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.builder()
                     .offScheduleId(work.getId())
                     .nurseId(work.getNurse().getId())
@@ -587,6 +568,8 @@ public class ScheduleService {
                     .endTime(work.getEndTime())
                     .updatedAt(workTemp.get().getUpdatedAt())
                     .build();
+
+            recalculateCurrentMonthStatistics(scheduleResponseDto.getStartTime(), work.getNurse());
 
             int month = work.getStartTime().getMonthValue();
 

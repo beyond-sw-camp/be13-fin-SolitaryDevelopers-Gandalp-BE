@@ -48,7 +48,6 @@ public class NurseController {
 
     private final NurseService nurseService;
     private final HeadNurseService headNurseService;
-    private final ScheduleService scheduleService;
     private final AuthService authService;
 
     private final NurseRepository nurseRepository;

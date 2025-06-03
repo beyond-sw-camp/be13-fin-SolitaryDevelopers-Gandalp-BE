@@ -1,6 +1,7 @@
 package com.gandalp.gandalp.shift.domain.service;
 
 import com.gandalp.gandalp.auth.model.service.AuthService;
+import com.gandalp.gandalp.mail.MailService;
 import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
@@ -28,6 +29,7 @@ public class CommentServiceImpl implements CommentService {
     private final NurseRepository nurseRepository;
     private final AuthService authService;
     private final ScheduleValidator scheduleValidator;
+    private final MailService mailService;
 
     // 댓글 C
     @Override
@@ -81,6 +83,11 @@ public class CommentServiceImpl implements CommentService {
                 .nurse(nurse)
                 .build();
         commentRepository.save(comment);
+        mailService.sendCommentNotificationMail(board.getNurse(), nurse);
+        // 댓글이 달리면, 해당 글을 작성한 nurse에게 댓글 달렸다고 메일 전송
+
+
+
         return new CommentResponseDto(comment);
     }
 

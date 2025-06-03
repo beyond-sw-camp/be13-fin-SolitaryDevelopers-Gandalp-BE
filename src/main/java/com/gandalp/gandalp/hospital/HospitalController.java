@@ -1,5 +1,6 @@
 package com.gandalp.gandalp.hospital;
 
+import com.gandalp.gandalp.hospital.domain.dto.DepartmentDto;
 import com.gandalp.gandalp.hospital.domain.dto.ErCountUpdateDto;
 import com.gandalp.gandalp.hospital.domain.dto.ErStatisticsRequestDto;
 import com.gandalp.gandalp.hospital.domain.dto.ErStatisticsResponseDto;
@@ -87,6 +88,27 @@ public class HospitalController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    // 병원- 모든 과 조회
+    @Operation(summary = "로그인한 관리자의 병원 내 과 조회", description = "관리자가 자신의 병원 내 과 정보를 조회할 수 있다.")
+    @GetMapping("/departments")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getDepartments(){
+
+        List<DepartmentDto> responseDto = null;
+
+        try{
+            responseDto = hospitalService.getDepartments();
+
+        }catch (Exception e){
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok(responseDto);
+    }
+
+
 
     // 응급실 가용 병상 수 수정
     @Operation(summary = "응급실 가용 병상 수 수정", description = "응급실 가용 병상 수를 간호사가 직접 수정할 수 있다.")

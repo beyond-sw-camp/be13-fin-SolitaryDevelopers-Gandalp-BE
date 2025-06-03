@@ -1,5 +1,6 @@
 package com.gandalp.gandalp.member.domain.repository;
 
+import com.gandalp.gandalp.hospital.domain.entity.Hospital;
 import com.gandalp.gandalp.member.domain.dto.MemberResponseDto;
 import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.MemberSearchOption;
@@ -9,6 +10,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface MemberRepositoryCustom {
 
-    Page<Member> searchMembers(String keyword, Type type, MemberSearchOption option, Pageable pageable);
+    Page<Member> searchMembers(Hospital hospital, String keyword, Type type, MemberSearchOption option, Pageable pageable);
 
 }

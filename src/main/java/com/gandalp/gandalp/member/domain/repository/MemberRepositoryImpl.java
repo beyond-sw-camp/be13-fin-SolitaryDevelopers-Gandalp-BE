@@ -1,5 +1,6 @@
 package com.gandalp.gandalp.member.domain.repository;
 
+import com.gandalp.gandalp.hospital.domain.entity.Hospital;
 import com.gandalp.gandalp.member.domain.dto.MemberResponseDto;
 import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.MemberSearchOption;
@@ -40,11 +41,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
             return null;
         }
 
-        if (option == MemberSearchOption.HOSPITAL) {
-
-            return member.hospital.name.containsIgnoreCase(keyword);
-
-        } else if (option == MemberSearchOption.DEPARTMENT) {
+       if (option == MemberSearchOption.DEPARTMENT) {
 
             return member.department.name.containsIgnoreCase(keyword);
 
@@ -61,21 +58,23 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
 
 
     @Override
-    public Page<Member> searchMembers(String keyword, Type type, MemberSearchOption option, Pageable pageable){
+    public Page<Member> searchMembers(Hospital getHospital, String keyword, Type type, MemberSearchOption option, Pageable pageable){
 
         // 검색 조건
         BooleanExpression typePredicate = (type != null)
                 ? member.type.eq(type)
                 : null;
 
+        BooleanExpression hospitalPredicate = member.hospital.eq(getHospital);
+
         BooleanExpression searchPredicate = searchOptions(keyword, option);
 
         List<Member> content = queryFactory
-
                 .selectFrom(member)
                 .leftJoin(member.hospital, hospital).fetchJoin()
                 .leftJoin(member.department, department).fetchJoin()
                 .where(
+                        hospitalPredicate,
                         typePredicate,
                         searchPredicate
                 )

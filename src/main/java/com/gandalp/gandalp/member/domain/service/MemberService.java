@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.gandalp.gandalp.auth.model.service.AuthService;
 import com.gandalp.gandalp.common.repository.CommonCodeRepository;
+import com.gandalp.gandalp.hospital.domain.entity.Department;
+import com.gandalp.gandalp.hospital.domain.entity.Hospital;
 import com.gandalp.gandalp.member.domain.dto.MemberInfoDto;
 import com.gandalp.gandalp.member.domain.dto.MemberResponseDto;
 import com.gandalp.gandalp.member.domain.dto.MemberUpdateDto;
@@ -31,7 +33,7 @@ public class MemberService {
 
     public Page<MemberResponseDto> getAllMembers(MemberSearchOption option, String keyword, Type type, Pageable pageable){
 
-
+        Hospital hospital = authService.getLoginMember().getHospital();
         // 기본 전체 조회
 
         // 검색어가 있는데 검색 옵션이 없는 경우 검색이 안됨
@@ -39,7 +41,7 @@ public class MemberService {
             throw new IllegalArgumentException("검색 옵션을 선택해 주십시오.");
         }
 
-        Page<Member> searchResults = memberRepository.searchMembers( keyword, type, option, pageable);
+        Page<Member> searchResults = memberRepository.searchMembers( hospital, keyword, type, option, pageable);
 
         // 검색 결과가 없는 경우 예외 처리
         if (searchResults.isEmpty()) {
@@ -101,6 +103,9 @@ public class MemberService {
                 ()-> new EntityNotFoundException("해당하는 회원이 존재하지 않습니다.")
         );
 
+        if (member.getType() == Type.ADMIN)
+            throw new IllegalArgumentException("관리자 계정은 삭제할 수 없습니다.");
+
 
         memberRepository.deleteById(member.getId());
 
@@ -115,8 +120,12 @@ public class MemberService {
 
         return MemberInfoDto.builder()
             .id(loginMember.getId())
-            .hospitalName(loginMember.getHospital().getName())
-            .deptName(loginMember.getDepartment().getName())
+            .hospitalName(loginMember.getHospital() != null ?
+                            loginMember.getHospital().getName() : "")
+            .deptName(
+                loginMember.getDepartment() != null ?
+                    loginMember.getDepartment().getName() : "" // 부서가 없으면 빈 문자열 반환
+            )
             .type(label)
             .build();
     }

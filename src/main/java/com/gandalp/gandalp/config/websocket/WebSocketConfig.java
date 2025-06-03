@@ -39,7 +39,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 
 		registry.addEndpoint("/connect")
-			.setAllowedOrigins("https://www.gandalp-service.com")
+//			.setAllowedOrigins("https://www.gandalp-service.com")
+			.setAllowedOrigins("http://localhost:5173")
 			.withSockJS();
 	}
 

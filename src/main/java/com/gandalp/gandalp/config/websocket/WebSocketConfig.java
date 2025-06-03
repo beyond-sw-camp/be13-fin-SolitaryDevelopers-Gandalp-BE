@@ -40,6 +40,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 		registry.addEndpoint("/connect")
 			.setAllowedOrigins("http://localhost:5173")
+				.setAllowedOrigins("https://www.gandalp-service.com")
 			.withSockJS();
 	}
 

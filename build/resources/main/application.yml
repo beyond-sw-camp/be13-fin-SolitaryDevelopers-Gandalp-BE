@@ -1,14 +1,14 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/gandalp_db
+    url: jdbc:mariadb://121.170.161.72:3306/gandalp_db
     # url: jdbc:mariadb://localhost:3306/web
 
-#    username: root
-    username: gandalp
-#    password: "0000"
-    password: "1234"
-#    password: gandalp
+    username: root
+    #    username: gandalp
+    password: "0000"
+  #    password: "1234"
+  #    password: gandalp
 
 
   jpa:
@@ -16,15 +16,15 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+        show_sql: false
+        format_sql: false
         dialect: org.hibernate.dialect.MySQL8Dialect
 
   profiles:
-    active: local
+    active: secret
 
   config:
-    import: "classpath:application-secret.yml"
+    import: "optional:file:./application-secret.yml"
 
   sql:
     init:

@@ -10,8 +10,9 @@ import java.util.List;
 
 public interface ShiftRepositoryCustom {
 
-    Page<ShiftResponseDto> getAll(Pageable pageable);
 
     Page<ShiftResponseDto> getSearchingAllByDepartment(Department department, String keyword, SearchOption searchOption, Pageable pageable);
+
+    Page<ShiftResponseDto> getAllByDepartment(Department department, Pageable pageable);
 
 }

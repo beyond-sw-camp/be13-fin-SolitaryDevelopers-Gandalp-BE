@@ -30,6 +30,8 @@ public class CommentResponseDto {
 
     private Long nurseId;
 
+    private String nurseName;
+
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
@@ -41,6 +43,7 @@ public class CommentResponseDto {
         this.updatedAt = comment.getUpdatedAt();
         this.updatedBy = comment.getUpdatedBy();
         this.nurseId = comment.getNurse() != null ? comment.getNurse().getId() : null;
+        this.nurseName = comment.getNurse() != null ? comment.getNurse().getName() : null;
     }
 
     public CommentResponseDto(Long commentId, String content, LocalDateTime createdAt) {

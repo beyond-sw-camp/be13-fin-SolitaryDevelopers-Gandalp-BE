@@ -27,4 +27,6 @@ public class ShiftDetailsResponseDto {
     List<CommentResponseDto> comments;
 
     private Long nurseId;
+
+    private String nurseName;
 }

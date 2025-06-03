@@ -16,7 +16,15 @@ public interface ShiftRepository extends JpaRepository<Board, Long>, ShiftReposi
     @Query("SELECT b FROM Board b LEFT JOIN FETCH b.comments WHERE b.id = :boardId")
     Optional<Board> findByIdWithComments(@Param("boardId") Long boardId);
 
-    Page<Board> findAllByDepartment(Department department, Pageable pageable);
+    @Query(
+        value = "SELECT b FROM Board b WHERE b.department = :department",
+        countQuery = "SELECT COUNT(b) FROM Board b WHERE b.department = :department"
+    )
+
+    Page<Board> findAllByDepartment(@Param("department") Department department, Pageable pageable);
+
+
+//    Page<Board> findAllByDepartment(Department department, Pageable pageable);
 
 
 }

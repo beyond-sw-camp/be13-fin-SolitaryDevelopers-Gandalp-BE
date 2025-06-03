@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.gandalp.gandalp.member.domain.entity.QNurse.nurse;
 import static com.gandalp.gandalp.shift.domain.entity.QBoard.board;
 import static com.gandalp.gandalp.common.entity.QCommonCode.commonCode;
 
@@ -29,39 +30,58 @@ public class ShiftRepositoryImpl implements ShiftRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    @Override
+    public Page<ShiftResponseDto> getAllByDepartment(Department department, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(board.department.eq(department));
 
-@Override
-public Page<ShiftResponseDto> getAll(Pageable pageable) {
-    BooleanBuilder builder = new BooleanBuilder();
+        List<ShiftResponseDto> content = queryFactory
+                .select(Projections.constructor(
+                        ShiftResponseDto.class,
+                        board.id,
+                        Expressions.stringTemplate("COALESCE({0}, {1})", commonCode.codeLabel, "요청 대기중"),
+                        board.content,
+                        board.createdAt,
+                        board.nurse.name // nurseName 필드 추가
+                ))
+                .from(board)
+                .leftJoin(commonCode)
+                .on(commonCode.codeGroup.eq("board_status")
+                        .and(commonCode.codeValue.eq(board.boardStatus.stringValue())))
+                .leftJoin(board.nurse, nurse) // nurse 엔티티 조인
+                .where(builder)
+                .orderBy(board.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
-    List<ShiftResponseDto> content = queryFactory
-            .select(Projections.constructor(
-                    ShiftResponseDto.class,
-                    board.id,
-                    board.content,
-                    board.boardStatus,
-                    commonCode.codeLabel,
-                    board.createdAt
-            ))
-            .from(board)
-            .leftJoin(commonCode)
-            .on(commonCode.codeGroup.eq("board_status")
-                    .and(commonCode.codeValue.eq(String.valueOf(board.boardStatus))))
-            .where(builder)
-            .orderBy(board.createdAt.desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
+//        List<ShiftResponseDto> content = queryFactory
+//                .select(Projections.constructor(
+//                        ShiftResponseDto.class,
+//                        board.id,
+//                        Expressions.stringTemplate("COALESCE({0}, {1})", commonCode.codeLabel, "요청 대기중"),
+//                        board.content,
+//                        board.updatedAt
+//                ))
+//
+//                .from(board)
+//                .leftJoin(commonCode)
+//                .on(commonCode.codeGroup.eq("board_status")
+//                        .and(commonCode.codeValue.eq(String.valueOf(board.boardStatus))))
+//                .where(builder)
+//                .orderBy(board.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
 
-    long count = queryFactory
-            .select(board.count())
-            .from(board)
-            .where(builder)
-            .fetchOne();
+        long count = queryFactory
+                .select(board.count())
+                .from(board)
+                .where(builder)
+                .fetchOne();
 
-    return new PageImpl<>(content, pageable, count);
-}
-
+        return new PageImpl<>(content, pageable, count);
+    }
 
     @Override
     public Page<ShiftResponseDto> getSearchingAllByDepartment(Department department, String keyword, SearchOption searchOption, Pageable pageable) {
@@ -78,15 +98,14 @@ public Page<ShiftResponseDto> getAll(Pageable pageable) {
                         board.id,
                         Expressions.stringTemplate("COALESCE({0}, {1})", commonCode.codeLabel, "요청 대기중"),
                         board.content,
-                        board.updatedAt
+                        board.createdAt,
+                        board.nurse.name // nurseName 필드 추가
                 ))
-
                 .from(board)
                 .leftJoin(commonCode)
                 .on(commonCode.codeGroup.eq("board_status")
-                        .and(commonCode.codeValue.eq(board.boardStatus.stringValue()))
-                )
-
+                        .and(commonCode.codeValue.eq(board.boardStatus.stringValue())))
+                .leftJoin(board.nurse, nurse) // nurse 엔티티 조인
                 .where(builder)
                 .orderBy(board.createdAt.desc())
                 .offset(pageable.getOffset())

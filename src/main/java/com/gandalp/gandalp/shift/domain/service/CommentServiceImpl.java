@@ -85,36 +85,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-//    @Override
-//    public CommentResponseDto createComment(CommentCreateRequestDto dto) {
-//        ScheduleValidator.ParsedShift parsed = scheduleValidator.parseContentToShiftTime(dto.getContent());
-//        if (!scheduleValidator.existsScheduleForNurse(dto.getNurseId(), parsed.startTime)) {
-//            throw new RuntimeException("해당 시간에 근무 일정이 없습니다.");
-//        }
-//
-//        Member member = authService.getLoginMember();
-//
-//        Long nurseId = dto.getNurseId();
-//        Nurse nurse = nurseRepository.findById(nurseId)
-//                .orElseThrow(() -> new IllegalArgumentException("간호사를 찾을 수 없습니다."));
-//
-//        Long boardId = dto.getBoardId();
-//        Board board = shiftRepository.findById(dto.getBoardId())
-//                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-//        if (board.getNurse().getId().equals(dto.getNurseId())) {
-//            throw new IllegalArgumentException("자신의 게시글에는 댓글을 작성할 수 없습니다.");
-//        }
-//
-//        Comment comment = Comment.builder()
-//                .content(dto.getContent())
-//                .member(member)
-//                .board(board)
-//                .nurse(nurse)
-//                .build();
-//        commentRepository.save(comment);
-//        return new CommentResponseDto(comment);
-//    }
-
     // 댓글 U
 
     @Override

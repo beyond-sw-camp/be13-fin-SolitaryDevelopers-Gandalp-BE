@@ -592,7 +592,10 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 ---
 
 ## 🔁 6. CI/CD Flow
-Jenkins + Docker 기반 자동 배포 구성
+<details>
+    <summary>CI/CD 계획서</summary>
+    <img src="https://github.com/user-attachments/assets/c9a129e6-05c9-4cf3-8a1f-30da933009f9" alt="Image 1" width="1202" />
+</details>
 
 ---
 

@@ -56,6 +56,7 @@ public class NurseRepositoryImpl implements NurseRepositoryCustom {
                 .from(nurse)
                 .where(search);
 
+
         return PageableExecutionUtils.getPage(nurseList, pageable, totalCount::fetchOne);
     }
 

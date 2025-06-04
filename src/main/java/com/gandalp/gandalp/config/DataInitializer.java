@@ -93,6 +93,19 @@ public class DataInitializer implements ApplicationRunner {
 
                 System.out.println("✅ nurse.sql 실행 완료");
 
+                Resource resourceRoom = new ClassPathResource("room.sql");
+                String sqlRoom = new String(resourceRoom.getInputStream().readAllBytes());
+
+                for (String statement : sqlRoom.split(";")) {
+                    if (!statement.trim().isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            stmt.execute(statement.trim());
+                        }
+                    }
+                }
+
+                System.out.println("✅ room.sql 실행 완료");
+
 
 
 

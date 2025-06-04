@@ -56,9 +56,10 @@ public class ScheduleController {
 
     @Operation(summary = "임시 오프 삭제")
     @DeleteMapping("/off/temp/{schedule-temp-id}")
-    public ResponseEntity<?> deleteOffSchedule(@PathVariable("schedule-temp-id") Long scheduleTempId) {
+    public ResponseEntity<?> deleteOffSchedule(@PathVariable("schedule-temp-id") Long scheduleTempId,
+                                                @RequestParam String email) {
         try {
-            ScheduleResponseDto offScheduleResponseDto = scheduleService.deleteOffScheduleTemp(scheduleTempId);
+            ScheduleResponseDto offScheduleResponseDto = scheduleService.deleteOffScheduleTemp(scheduleTempId,email);
             return ResponseEntity.ok().body(offScheduleResponseDto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

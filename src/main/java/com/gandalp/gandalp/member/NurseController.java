@@ -3,6 +3,7 @@ package com.gandalp.gandalp.member;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.gandalp.gandalp.member.domain.dto.CustomPage;
 import com.gandalp.gandalp.member.domain.dto.NurseNameEmailDto;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
@@ -118,18 +119,24 @@ public class NurseController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) NurseSearchOption searchOption, // 검색 옵션
             @PageableDefault(size = 10, page = 0) Pageable pageable) {
-        Page<NurseResponseDto> allNurses = null;
+        CustomPage<NurseResponseDto> customPage = null;
 
         try{
 
-            allNurses = headNurseService.getAll(keyword, searchOption, pageable);
+            Page<NurseResponseDto> allNurses = headNurseService.getAll(keyword, searchOption, pageable);
+
+            customPage = new CustomPage<>(
+                allNurses.getContent(),
+                allNurses.getTotalPages(),
+                allNurses.getTotalElements()
+            );
 
         }catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
 
-        return ResponseEntity.ok(allNurses);
+        return ResponseEntity.ok(customPage);
     }
 
     // 간호사들의 현재 상태 조회

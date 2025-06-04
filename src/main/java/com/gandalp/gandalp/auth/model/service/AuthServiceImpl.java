@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         Member member = Member.builder()
                 .accountId(accountId)
                 .password(encodedPassword)
-                .type(dto.getType()) // 기본값: PARAMEDIC
+                .type(dto.getType())
                 .hospital(hospital)
                 .department(department)
                 .build();

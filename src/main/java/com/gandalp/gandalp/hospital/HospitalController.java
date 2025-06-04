@@ -73,7 +73,7 @@ public class HospitalController {
     // 병원 정보 단건 조회
     @Operation(summary = "로그인한 간호사의 병원 정보 조회", description = "간호사가 자신의 병원 정보를 조회할 수 있다.")
     @GetMapping("/data")
-    @PreAuthorize("hasAnyRole('NURSE', 'HEAD_NURSE')")
+    @PreAuthorize("hasAnyRole('NURSE', 'HEAD_NURSE', 'NIGHT_NURSE')")
     public ResponseEntity<?> getOneHospital(){
 
         HospitalDto responseDto = null;
@@ -113,7 +113,7 @@ public class HospitalController {
     // 응급실 가용 병상 수 수정
     @Operation(summary = "응급실 가용 병상 수 수정", description = "응급실 가용 병상 수를 간호사가 직접 수정할 수 있다.")
     @PostMapping
-    @PreAuthorize("hasAnyRole('NURSE', 'HEAD_NURSE')")
+    @PreAuthorize("hasAnyRole('NURSE', 'HEAD_NURSE', 'NIGHT_NURSE')")
     public ResponseEntity<?> updateErCount(@Valid @RequestBody ErCountUpdateDto dto) {
 
         HospitalErResponseDto resDto = null;

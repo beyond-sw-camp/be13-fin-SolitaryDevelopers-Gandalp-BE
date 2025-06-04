@@ -21,6 +21,6 @@ public class RouteInfoDto implements Serializable {
 
     // 실패 시 빈 객체 반환
     public static RouteInfoDto empty() {
-        return new RouteInfoDto(Double.MAX_VALUE, Double.MAX_VALUE);
+        return new RouteInfoDto(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 }

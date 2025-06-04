@@ -47,6 +47,10 @@ public class DirectionCacheService {
 
     // 소수점이 너무 길어서 미세하게 다른 경우 계속 API 호출하는 문제 반올림해서 4~50 정도는 커버해서
     // naver api  호출 횟수를 줄임
+    // 소수점 5자리까지 반올림
+    private static BigDecimal roundToFive(double value) {
+        return BigDecimal.valueOf(value).setScale(5, RoundingMode.HALF_UP);
+    }
 
 
     // 거리 계산만 담당 ( redis에 저장 )
@@ -59,12 +63,10 @@ public class DirectionCacheService {
         // 전달받은 좌표를 반올림 (소수점 6자리)
         // double은 타입을 소수점 자릿수를 정확하게 반올림하기 어려줘 캐시 키로 쓰면 일관성이 깨질 수 있음
         // BigDecimal은 10진법으로 정확하게 소수점 반올림 관리 가능
-        BigDecimal lonBd = BigDecimal.valueOf(longitude).setScale(5, RoundingMode.HALF_UP);
-        BigDecimal latBd = BigDecimal.valueOf(latitude).setScale(5, RoundingMode.HALF_UP);
-        BigDecimal destLonBd = BigDecimal.valueOf(dest.getLongitude()).setScale(6, RoundingMode.HALF_UP);
-        BigDecimal destLatBd = BigDecimal.valueOf(dest.getLatitude()).setScale(6, RoundingMode.HALF_UP);
-
-
+        BigDecimal lonBd       = roundToFive(longitude);
+        BigDecimal latBd       = roundToFive(latitude);
+        BigDecimal destLonBd   = roundToFive(dest.getLongitude());
+        BigDecimal destLatBd   = roundToFive(dest.getLatitude());
         // 반올림된 좌표를 문자열로 바꿈
         String lonRoundedStr      = lonBd.toPlainString();
         String latRoundedStr      = latBd.toPlainString();

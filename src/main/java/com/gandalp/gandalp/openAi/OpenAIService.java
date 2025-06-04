@@ -231,7 +231,8 @@ public class OpenAIService {
         // 이미 만들어져 있던 임시 근무는 삭제
         scheduleTempRepository.deleteAllByCategory(TempCategory.WORKING_TEMP);
 
-        int month = LocalDate.now().plusMonths(1).getMonthValue();
+//        int month = LocalDate.now().plusMonths(1).getMonthValue();
+        int month = 4;
         int year = LocalDate.now().plusMonths(1).getYear(); // 연도도 같이 바뀔 수 있으니 꼭 처리!
 
         Department department = authService.getLoginMember().getDepartment();

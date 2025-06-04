@@ -66,9 +66,9 @@ public class ScheduleService {
         // 과거 일정이면 hasConflict = false
         boolean isPast = end.isBefore(now) && start.isBefore(now);
 
-        if (isPast){
-            throw new IllegalArgumentException("과거 일정은 등록할 수 없습니다.");
-        }
+//        if (isPast){
+//            throw new IllegalArgumentException("과거 일정은 등록할 수 없습니다.");
+//        }
 
         // 현재 또는 미래 일정이면 겹치는 스케줄 검사
         boolean hasConflict =
@@ -116,7 +116,7 @@ public class ScheduleService {
         return nurseResponseDto;
     }
 
-    public ScheduleResponseDto deleteOffScheduleTemp(Long scheduleTempId) {
+    public ScheduleResponseDto deleteOffScheduleTemp(Long scheduleTempId, String email) {
         try {
 
             Optional<ScheduleTemp> scheduleTemp = scheduleTempRepository.findById(scheduleTempId);
@@ -124,6 +124,8 @@ public class ScheduleService {
 
             Optional<String> codeLabel = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue("schedule_temp_category",String.valueOf(scheduleTemp.get().getCategory()));
             if(codeLabel.isEmpty()) throw new RuntimeException("Code Label is Empty");
+
+
 
             ScheduleResponseDto offScheduleResponseDto = ScheduleResponseDto.builder()
                     .offScheduleId(scheduleTempId)
@@ -134,7 +136,13 @@ public class ScheduleService {
                     .content(scheduleTemp.get().getContent())
                     .build();
 
-            scheduleTempRepository.deleteById(scheduleTempId);
+            Optional<Nurse> nurseByEmail = nurseRepository.findByEmail(email);
+            if(nurseByEmail.isPresent() && nurseByEmail.get().equals(scheduleTemp.get().getNurse())) {
+                scheduleTempRepository.deleteById(scheduleTempId);
+            } else {
+                throw new RuntimeException("유효하지 않은 이메일 입니다.");
+            }
+
 
             if(scheduleTemp.get().getCategory() == TempCategory.ACCEPTED_OFF) {
 

@@ -41,8 +41,6 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-    private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "회원가입")
     @PostMapping("/join")

@@ -34,9 +34,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     // 멤버 검색 조건
     private BooleanExpression searchOptions(String keyword, MemberSearchOption option) {
 
-        // 옵션 값이 없으면 전체 조회(최신 순)
-        // 검색어가 있으면 검색 옵션도 있어야 함
-        if(option == null || keyword == null || keyword.isBlank()) {
+        if(keyword == null || keyword.isBlank()) {
 
             return null;
         }

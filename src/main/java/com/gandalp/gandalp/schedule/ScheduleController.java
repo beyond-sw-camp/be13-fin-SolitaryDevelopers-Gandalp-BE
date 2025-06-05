@@ -200,25 +200,6 @@ public class ScheduleController {
     }
 
 
-    // 간호사 업무 비율 분석
-    // 오프 포함 ( 수술, 오프, 근무(타입))
-
-
-    // 응급실 통계
-
-
-    // 누적 수술 수 조회
-    // 해당 과의 간호사들의 수술 수를 월 별로 가져옴 + 전체 수술 수를 map으로 가져옴
-    // @Operation(summary = "간호사 누적 수술 수 조회", description = "과에 소속된 모든 간호사들의 누적 수술수를 조회할 수 있다.")
-    // @GetMapping("/status/operation")
-    // public ResponseEntity<?> get
-    //
-    //
-    //
-    //
-
-
-
     // 승인된 오프 삭제
     @Operation(summary = "승인된 오프 삭제")
     @DeleteMapping("/off/{schedule-id}")

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gandalp.gandalp.member.domain.entity.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,7 @@ public class NurseStaticsService {
 		);
 
 		// 3. 해당하는 부서의 모든 간호사 리스트 조회
-		List<Nurse> nurseList = nurseRepository.findByDepartment(department);
+		List<Nurse> nurseList = nurseRepository.findByDepartmentAndTypeNot(department, Type.HEAD_NURSE);
 		if (nurseList.isEmpty()){
 			throw new IllegalArgumentException("해당 과에 간호사가 존재하지 않습니다.");
 		}

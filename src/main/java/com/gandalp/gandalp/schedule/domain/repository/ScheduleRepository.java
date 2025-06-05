@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.gandalp.gandalp.member.domain.entity.Type;
 import com.gandalp.gandalp.schedule.domain.entity.Category;
 import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
 import com.gandalp.gandalp.schedule.domain.entity.TempCategory;
@@ -56,10 +57,19 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
 
     @Query("SELECT s FROM Schedule s " +
             "WHERE s.nurse.id = :nurseId " +
+            "AND s.category =:category " +
             "AND FUNCTION('YEAR', s.startTime) = :year " +
             "AND FUNCTION('MONTH', s.startTime) = :month")
     List<Schedule> findByNurseAndMonth(@Param("nurseId") Long nurseId,
                                        @Param("year") int year,
-                                       @Param("month") int month);
+                                       @Param("month") int month,
+                                       @Param("category") Category category);
+
+    @Query("SELECT s FROM Schedule s " +
+            "WHERE s.nurse.id = :nurseId " +
+            "AND s.category = :category" )
+    List<Schedule> findByNurseAndCategory(@Param("nurseId") Long nurseId,
+                                          @Param("category") Category category);
+
 
 }

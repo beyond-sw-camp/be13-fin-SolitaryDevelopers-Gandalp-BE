@@ -14,6 +14,7 @@ import com.gandalp.gandalp.hospital.domain.repository.DepartmentRepository;
 import com.gandalp.gandalp.member.domain.entity.Member;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
 import com.gandalp.gandalp.member.domain.entity.Status;
+import com.gandalp.gandalp.member.domain.entity.Type;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.schedule.domain.dto.StaticRequestDto;
 import com.gandalp.gandalp.schedule.domain.dto.StaticsResponseDto;

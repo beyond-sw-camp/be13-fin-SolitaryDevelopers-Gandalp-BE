@@ -106,9 +106,57 @@ public class DataInitializer implements ApplicationRunner {
 
                 System.out.println("✅ room.sql 실행 완료");
 
+                Resource offTemp = new ClassPathResource("offTemp.sql");
+                String sqlOffTemp = new String(offTemp.getInputStream().readAllBytes());
 
+                for (String statement : sqlOffTemp.split(";")) {
+                    if (!statement.trim().isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            stmt.execute(statement.trim());
+                        }
+                    }
+                }
 
+                System.out.println("✅ offTemp.sql 실행 완료");
 
+                Resource Offschedule = new ClassPathResource("OffSchedule.sql");
+                String sqlOff = new String(Offschedule.getInputStream().readAllBytes());
+
+                for (String statement : sqlOff.split(";")) {
+                    if (!statement.trim().isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            stmt.execute(statement.trim());
+                        }
+                    }
+                }
+
+                System.out.println("✅ OffSchedule.sql 실행 완료");
+
+                Resource surgerySchedule = new ClassPathResource("surgery_schedule.sql");
+                String sqlSurgery = new String(surgerySchedule.getInputStream().readAllBytes());
+
+                for (String statement : sqlSurgery.split(";")) {
+                    if (!statement.trim().isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            stmt.execute(statement.trim());
+                        }
+                    }
+                }
+
+                System.out.println("✅ surgery_schedule.sql 실행 완료");
+
+                Resource surgeryNurse = new ClassPathResource("surgery_nurse.sql");
+                String sqlSurgeryNurse = new String(surgeryNurse.getInputStream().readAllBytes());
+
+                for (String statement : sqlSurgeryNurse.split(";")) {
+                    if (!statement.trim().isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            stmt.execute(statement.trim());
+                        }
+                    }
+                }
+
+                System.out.println("✅ surgery_nurse.sql 실행 완료");
 
             }
         } else {

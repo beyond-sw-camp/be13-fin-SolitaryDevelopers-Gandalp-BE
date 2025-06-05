@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gandalp.gandalp.auth.model.service.AuthService;
 import com.gandalp.gandalp.hospital.domain.entity.Department;
 import com.gandalp.gandalp.member.domain.entity.Nurse;
+import com.gandalp.gandalp.member.domain.entity.Type;
 import com.gandalp.gandalp.member.domain.repository.NurseRepository;
 import com.gandalp.gandalp.schedule.domain.entity.Category;
 import com.gandalp.gandalp.schedule.domain.entity.Schedule;
@@ -144,12 +145,12 @@ public class OpenAIService {
                 .append("3. ❌ 각 간호사의 offDays 날짜에는 절대로 근무 배정하지 마. 단 하루라도 위반하면 전체 스케줄은 무효다.\n")
                 .append("4. 이 주간은 ").append(days).append("일이고, 1일 3교대이므로 총 ").append(totalShifts).append("개의 근무가 존재한다.\n")
                 .append("   이를 ").append(dto.getNurses().size()).append("명의 간호사가 최대한 공평하게 나누어야 한다.\n")
-                .append("5. 간호사 TYPE을 참고하여 TYPE이 NURSE혹은 HEAD_NURSE인 경우 절대로 NIGHT 근무에 배정하지 않아야 한다.\n")
-                .append("6. 간호사 TYPE을 참고하여 TYPE이 NIGHT_NURSE인 경우 항상 NIGHT 근무에만 배정되어야 한다.\n")
-                .append( "- TYPE이 NIGHT_NURSE인 간호사는 주 최대 3회까지만 근무할 수 있고, NIGHT를 3회 근무한 간호사는 그 주 근무에서 제외된다.\n")
-                .append("7. ✅ 간호사 간 총 근무 수 차이는 최대 5 이하여야 한다.\n")
-                .append("8. 누적 근무 통계를 참고하여 총 근무 수가 적은 간호사는 더 많이, 많은 간호사는 덜 배정하라.\n")
-                .append("9. 모든 출력은 날짜별로 day/evening/night 키를 포함한 JSON으로 하며, 반드시 쌍따옴표를 사용하고 주석을 포함하지 마.\n\n")
+                .append("5. 간호사 TYPE을 참고하여 TYPE이 NURSE인 경우 절대로 NIGHT 근무에 배정하지 않아야 한다.\n")
+                .append("6. 간호사 TYPE을 참고하여 TYPE이 NIGHT_NURSE인 경우 무조건 NIGHT 근무에만 배정되어야 한다.\n")
+                .append("7. 간호사 TYPE이 NURSE인 경우 그 간호사의 DAY근무 수와 EVENING 근무 수의 편차가 5이하로 배정되어야 한다.\n")
+                .append("8. TYPE이 NIGHT_NURSE인 간호사는 주 최대 3회까지만 근무할 수 있고, NIGHT를 3회 근무한 간호사는 그 주 근무에서 제외된다.\n")
+                .append("9. 누적 근무 통계를 참고하여 간호사 타입별로 근무 수가 적은 간호사는 더 많이, 많은 간호사는 덜 배정하라.\n")
+                .append("10. 모든 출력은 날짜별로 day/evening/night 키를 포함한 JSON으로 하며, 반드시 쌍따옴표를 사용하고 주석을 포함하지 마.\n\n")
                 .append("📅 이번 주 스케줄 범위: ").append(start).append(" ~ ").append(end).append("\n\n")
                 .append("📊 간호사 TYPE, 간호사 별 누적 근무 통계 및 오프 일정 (❌ offDays 날짜에는 절대 배정하지 마):\n");
 
@@ -226,22 +227,60 @@ public class OpenAIService {
         };
     }
 
+    public List<FairnessDTO> buildFairnessFromDatabase(){
+
+        Department department = authService.getLoginMember().getDepartment();
+
+        List<Nurse> allNurses = nurseRepository.findByDepartmentAndTypeNot(department,Type.HEAD_NURSE);
+
+        List<FairnessDTO> fairnessDTOList = allNurses.stream()
+                .map(nurse -> {
+                    List<Schedule> schedules = scheduleRepository.findByNurseAndCategory(nurse.getId(), Category.WORKING);
+
+                    int dayWorked = countShiftByTimeRange(schedules, "DAY");
+                    int eveningWorked = countShiftByTimeRange(schedules, "EVENING");
+                    int nightWorked = countShiftByTimeRange(schedules, "NIGHT");
+                    int totalWorked = dayWorked + eveningWorked + nightWorked;
+
+                    List<ScheduleTemp> scheduleTemps = scheduleTempRepository.findByNurseAndCategory(nurse.getId(), TempCategory.WORKING_TEMP);
+                    int tempDayWorked = TempWorkCountShiftByTimeRange(scheduleTemps, "DAY");
+                    int tempEveningWorked = TempWorkCountShiftByTimeRange(scheduleTemps, "EVENING");
+                    int tempNightWorked = TempWorkCountShiftByTimeRange(scheduleTemps, "NIGHT");
+                    int tempTotalWorked = tempDayWorked + tempEveningWorked + tempNightWorked;
+
+                   return FairnessDTO.builder()
+                           .nurseId(nurse.getId())
+                           .nurseName(nurse.getName())
+                           .dayWorked(dayWorked)
+                           .eveningWorked(eveningWorked)
+                           .nightWorked(nightWorked)
+                           .totalWorked(totalWorked)
+                           .tempDayWorked(tempDayWorked)
+                           .tempEveningWorked(tempEveningWorked)
+                           .tempNightWorked(tempNightWorked)
+                           .tempTotalWorked(tempTotalWorked)
+                           .build();
+                })
+                .toList();
+
+        return fairnessDTOList;
+    }
+
+
 
     public OpenAIRequestDTO buildRequestDTOFromDatabase() {
-        // 이미 만들어져 있던 임시 근무는 삭제
-        scheduleTempRepository.deleteAllByCategory(TempCategory.WORKING_TEMP);
 
 //        int month = LocalDate.now().plusMonths(1).getMonthValue();
-        int month = 4;
+        int month = 7;
         int year = LocalDate.now().plusMonths(1).getYear(); // 연도도 같이 바뀔 수 있으니 꼭 처리!
 
         Department department = authService.getLoginMember().getDepartment();
 
-        List<Nurse> allNurses = nurseRepository.findByDepartment(department); // 필요시 부서 필터링
+        List<Nurse> allNurses = nurseRepository.findByDepartmentAndTypeNot(department,Type.HEAD_NURSE);
 
         List<OpenAIRequestDTO.NurseScheduleInput> nurseInputs = allNurses.stream()
                 .map(nurse -> {
-                    List<Schedule> schedules = scheduleRepository.findByNurseAndMonth(nurse.getId(), year, month);
+                    List<Schedule> schedules = scheduleRepository.findByNurseAndCategory(nurse.getId(), Category.WORKING);
 
                     int dayWorked = countShiftByTimeRange(schedules, "DAY");
                     int eveningWorked = countShiftByTimeRange(schedules, "EVENING");
@@ -266,8 +305,6 @@ public class OpenAIService {
                 })
                 .toList();
 
-        scheduleTempRepository.deleteAllByCategory(TempCategory.WORKING_TEMP);
-
         return OpenAIRequestDTO.builder()
                 .year(year)
                 .month(month)
@@ -278,6 +315,28 @@ public class OpenAIService {
     private int countShiftByTimeRange(List<Schedule> schedules, String shiftType) {
         int count = 0;
         for (Schedule schedule : schedules) {
+            int hour = schedule.getStartTime().getHour();
+
+            switch (shiftType) {
+                case "DAY":
+                    if (hour >= 6 && hour < 14) count++;
+                    break;
+                case "EVENING":
+                    if (hour >= 14 && hour < 22) count++;
+                    break;
+                case "NIGHT":
+                    // 나이트는 밤 10시~익일 6시 (22:00 ~ 06:00)
+                    // 시간상 0~6 사이이거나 22~23 사이
+                    if (hour >= 22 || hour < 6) count++;
+                    break;
+            }
+        }
+        return count;
+    }
+
+    private int TempWorkCountShiftByTimeRange(List<ScheduleTemp> schedules, String shiftType) {
+        int count = 0;
+        for (ScheduleTemp schedule : schedules) {
             int hour = schedule.getStartTime().getHour();
 
             switch (shiftType) {

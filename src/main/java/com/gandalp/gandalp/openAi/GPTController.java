@@ -47,6 +47,18 @@ public class GPTController {
 
     }
 
+    @GetMapping("/fairness")
+    public ResponseEntity<?> showFairness(){
+
+        try {
+            List<FairnessDTO> dto = openAIService.buildFairnessFromDatabase();
+            return ResponseEntity.ok().body(dto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
     @PostMapping("/generate-and-create")
     public ResponseEntity<?> generateAndCreateSchedule() {
         try {

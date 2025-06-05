@@ -549,6 +549,8 @@ public class ScheduleService {
             throw new RuntimeException("workTemp is empty");
         }
 
+        scheduleTempRepository.deleteById(workTemp.get().getId());
+
         Schedule work = Schedule.builder()
                 .nurse(workTemp.get().getNurse())
                 .category(Category.WORKING)
@@ -599,6 +601,9 @@ public class ScheduleService {
         if (!scheduleJson.isSuccess()) {
             throw new RuntimeException("유효하지 않은 근무입니다.");
         }
+
+        // 이미 만들어져 있던 임시 근무는 삭제
+        scheduleTempRepository.deleteAllByCategory(TempCategory.WORKING_TEMP);
 
         List<ScheduleTemp> result = new ArrayList<>();
 

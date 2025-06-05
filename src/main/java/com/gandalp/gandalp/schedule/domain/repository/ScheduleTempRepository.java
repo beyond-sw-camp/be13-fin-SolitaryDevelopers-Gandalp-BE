@@ -1,6 +1,8 @@
 package com.gandalp.gandalp.schedule.domain.repository;
 
 import com.gandalp.gandalp.member.domain.entity.Nurse;
+import com.gandalp.gandalp.schedule.domain.entity.Category;
+import com.gandalp.gandalp.schedule.domain.entity.Schedule;
 import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
 import com.gandalp.gandalp.schedule.domain.entity.TempCategory;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -41,5 +43,12 @@ public interface ScheduleTempRepository extends JpaRepository<ScheduleTemp, Long
     List<ScheduleTemp> findAllWorkByCategory(@Param("nurseList") List<Nurse> nurseList, @Param("category") TempCategory category);
 
     void deleteAllByCategory(TempCategory category);
+
+    @Query("SELECT s FROM ScheduleTemp s " +
+            "WHERE s.nurse.id = :nurseId " +
+            "AND s.category =:category ")
+    List<ScheduleTemp> findByNurseAndCategory(@Param("nurseId") Long nurseId,
+                                       @Param("category") TempCategory category);
+
 
 }

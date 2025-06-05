@@ -22,7 +22,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url(serverUrl))
+//                .addServersItem(new Server().url(serverUrl))
                 .components(new Components()
 
                         .addSecuritySchemes("BearerAuth", new SecurityScheme()

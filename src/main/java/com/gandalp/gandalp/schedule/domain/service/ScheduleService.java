@@ -564,9 +564,6 @@ public class ScheduleService {
 
             if(codeLabel.isEmpty()) throw new RuntimeException("Code Label is Empty");
 
-            scheduleTempRepository.deleteById(workTemp.get().getId());
-
-
             ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.builder()
                     .offScheduleId(work.getId())
                     .nurseId(work.getNurse().getId())

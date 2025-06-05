@@ -602,11 +602,11 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 ## 📃 7. 통합 테스트 결과서
 <details>
     <summary>백엔드</summary>
-[백엔드 통합 테스트.pdf](https://github.com/user-attachments/files/20588091/default.pdf)
+[백엔드 통합 테스트.pdf] (https://github.com/user-attachments/files/20601213/default.pdf?raw=true)
 </details>
 <details>
     <summary>프론트엔드</summary>
-    [프론트 통합 테스트.pdf](https://github.com/user-attachments/files/20588130/default.pdf)
+    [프론트 통합 테스트.pdf](https://github.com/user-attachments/files/20601212/default.pdf?raw=true)
 </details>
 
 ## 🧱 8. 시스템 아키텍쳐
@@ -622,8 +622,9 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 <details>
     <summary>WBS</summary>
     <img width="1202" alt="API 명세서" src="https://github.com/user-attachments/assets/17acea0b-5a95-400a-8a41-9805170ae01a" />
+    [WBS 링크](https://docs.google.com/spreadsheets/d/1MOykkjoHG5tIhQhpYJZ3UK5iLq_teeQv8LXvKvmIpg0/edit?usp=sharing)
 </details>
-[WBS 링크](https://docs.google.com/spreadsheets/d/1MOykkjoHG5tIhQhpYJZ3UK5iLq_teeQv8LXvKvmIpg0/edit?usp=sharing)
+
 
 ---
 

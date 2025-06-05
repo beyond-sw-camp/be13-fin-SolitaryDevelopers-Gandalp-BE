@@ -130,7 +130,6 @@ public class OpenAIService {
             return "오류 발생: " + e.getMessage();
         }
     }
-
     public String buildPromptForWeek(OpenAIRequestDTO dto, LocalDate start, LocalDate end) {
         int days = (int) ChronoUnit.DAYS.between(start, end) + 1;
         int totalShifts = days * 3;

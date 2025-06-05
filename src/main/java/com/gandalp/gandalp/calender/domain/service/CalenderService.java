@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,10 +98,12 @@ public class CalenderService {
 
     public List<PersonalScheduleResponseDto> getPersonalSchedules(Long nurseId) {
         Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(() -> new RuntimeException("간호사를 찾을 수 없습니다."));
+        List<Nurse> nurses = new ArrayList<>();
+        nurses.add(nurse);
 
-        List<Schedule> schedulesByNurseId = scheduleRepository.findByNurseId(nurse.getId());
+        List<Schedule> schedules = scheduleRepository.findInNurseAndCategory(nurses, Category.PERSONAL);
 
-        return schedulesByNurseId.stream().map(PersonalScheduleResponseDto::fromSchedule).collect(Collectors.toList());
+        return schedules.stream().map(PersonalScheduleResponseDto::fromSchedule).collect(Collectors.toList());
     }
 
     public List<PersonalScheduleResponseDto> getSchedules() {

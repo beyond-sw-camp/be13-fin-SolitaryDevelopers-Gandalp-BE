@@ -266,6 +266,8 @@ public class OpenAIService {
                 })
                 .toList();
 
+        scheduleTempRepository.deleteAllByCategory(TempCategory.WORKING_TEMP);
+
         return OpenAIRequestDTO.builder()
                 .year(year)
                 .month(month)

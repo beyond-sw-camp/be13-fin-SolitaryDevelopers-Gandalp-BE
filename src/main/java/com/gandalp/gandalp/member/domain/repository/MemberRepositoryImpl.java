@@ -35,9 +35,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
     private BooleanExpression searchOptions(String keyword, MemberSearchOption option) {
 
         if(keyword == null || keyword.isBlank()) {
-
             return null;
         }
+
+        if(option == null) {
+            return member.department.name.containsIgnoreCase(keyword)
+                .or(member.accountId.containsIgnoreCase(keyword));
+        }
+
 
        if (option == MemberSearchOption.DEPARTMENT) {
 

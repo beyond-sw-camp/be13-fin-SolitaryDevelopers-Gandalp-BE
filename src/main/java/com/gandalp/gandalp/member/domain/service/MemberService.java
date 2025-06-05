@@ -36,11 +36,6 @@ public class MemberService {
         Hospital hospital = authService.getLoginMember().getHospital();
         // 기본 전체 조회
 
-        // 검색어가 있는데 검색 옵션이 없는 경우 검색이 안됨
-        if (keyword != null && option == null) {
-            throw new IllegalArgumentException("검색 옵션을 선택해 주십시오.");
-        }
-
         Page<Member> searchResults = memberRepository.searchMembers( hospital, keyword, type, option, pageable);
 
         // 검색 결과가 없는 경우 예외 처리

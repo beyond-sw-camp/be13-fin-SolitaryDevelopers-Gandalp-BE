@@ -602,11 +602,11 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 ## 📃 7. 통합 테스트 결과서
 <details>
     <summary>백엔드</summary>
-[백엔드 통합 테스트.pdf](https://github.com/user-attachments/files/20627167/backendCICD.pdf)
+[백엔드 통합 테스트.pdf](https://github.com/user-attachments/files/20627167/default.pdf)
 </details>
 <details>
     <summary>프론트엔드</summary>
-    [프론트 통합 테스트.pdf](https://github.com/user-attachments/files/20627170/frontendCICD.pdf)
+    [프론트 통합 테스트.pdf](https://github.com/user-attachments/files/20627170/default.pdf)
 </details>
 
 ## 🧱 8. 시스템 아키텍쳐

@@ -5,12 +5,14 @@ import com.gandalp.gandalp.schedule.domain.dto.WorkTempResponseDto;
 import com.gandalp.gandalp.schedule.domain.entity.ScheduleTemp;
 import com.gandalp.gandalp.schedule.domain.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/gpt")
 @RequiredArgsConstructor
@@ -20,10 +22,10 @@ public class GPTController {
     private final ScheduleService scheduleService;
 
 
-    @GetMapping("/test")
-    public String testGpt(@RequestParam(required = true) String question) {
-        return openAIService.askQuestion(question);
-    }
+//    @GetMapping("/test")
+//    public String testGpt(@RequestParam(required = true) String question) {
+//        return openAIService.askQuestion(question);
+//    }
 
     @PostMapping("/generate")
     public ResponseEntity<?> generateSchedule(@RequestBody OpenAIRequestDTO request) {
@@ -65,8 +67,12 @@ public class GPTController {
             // 1. 요청 DTO 구성 (DB에서)
             OpenAIRequestDTO dto = openAIService.buildRequestDTOFromDatabase();
 
+            log.info("dto : {}", dto.toString());
+
             // 2. GPT 호출
             ScheduleResult scheduleResult = openAIService.requestScheduleFromGPT(dto);
+
+            log.info("scheduleResult : {}", scheduleResult.toString());
 
             // 3. DB 저장
             List<WorkTempResponseDto> resultDtos = scheduleService.createWorkTemp(scheduleResult);

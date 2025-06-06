@@ -24,5 +24,4 @@ public interface NurseRepository extends JpaRepository<Nurse, Long>, NurseReposi
     Optional<Nurse> findByName(String name);
 
     Optional<Nurse> findByNo(String no);
-
 }

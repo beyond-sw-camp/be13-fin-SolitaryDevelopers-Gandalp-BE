@@ -183,7 +183,6 @@ public class ScheduleController {
         summary = "간호사 통합 통계 조회",
         description = "과에 소속된 간호사들의 근무/오프/수술 통계를 통합 조회합니다. status 값으로 필터링할 수 있습니다."
     )
-
     @PostMapping("/status/working")
     public ResponseEntity<?> getAllNurseWorking(@Valid @RequestBody StaticRequestDto staticRequestDto){
 

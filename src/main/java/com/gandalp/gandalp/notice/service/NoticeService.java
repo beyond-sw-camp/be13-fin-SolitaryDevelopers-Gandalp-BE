@@ -76,7 +76,7 @@ public class NoticeService {
 	}
 
 
-
+	// 일반 공지사항 조회
 	public List<NoticeResponseDto> getGeneralNoticeList(){
 
 
@@ -96,7 +96,7 @@ public class NoticeService {
 
 		// 5. code label
 		return allList.stream()
-			.sorted(Comparator.comparing(Notice::getCategory))
+			.sorted(Comparator.comparing(Notice::getCreatedAt).reversed())
 			.map(notice -> {
 				Optional<String> noticeCategory = commonCodeRepository.findCodeLabelByCodeGroupAndCodeValue(
 					"notice_category", String.valueOf(notice.getCategory()));

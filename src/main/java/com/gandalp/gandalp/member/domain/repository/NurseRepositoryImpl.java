@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.gandalp.gandalp.common.entity.QCommonCode.*;
 import static com.gandalp.gandalp.member.domain.entity.QNurse.nurse;
 
 @Repository
@@ -43,9 +44,14 @@ public class NurseRepositoryImpl implements NurseRepositoryCustom {
                 .select(Projections.constructor(NurseResponseDto.class,
                         nurse.id,
                         nurse.name,
+                        commonCode.codeLabel.stringValue(),
                         nurse.email
                 ))
                 .from(nurse)
+                .leftJoin(commonCode).on(
+                    commonCode.codeGroup.eq("member")
+                        .and(commonCode.codeValue.eq(nurse.type.stringValue()))
+                )
                 .where(search)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -65,6 +71,9 @@ public class NurseRepositoryImpl implements NurseRepositoryCustom {
             return null;
         }
 
+        if (searchOption == NurseSearchOption.TYPE){
+            return commonCode.codeLabel.contains(keyword);
+        }
 
         if (searchOption == NurseSearchOption.NAME){
             return nurse.name.contains(keyword);

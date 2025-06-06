@@ -158,6 +158,19 @@ public class DataInitializer implements ApplicationRunner {
 
                 System.out.println("✅ surgery_nurse.sql 실행 완료");
 
+                Resource persenalSchedule = new ClassPathResource("schedule.sql");
+                String sqlPersenalSchedule = new String(persenalSchedule.getInputStream().readAllBytes());
+
+                for (String statement : sqlPersenalSchedule.split(";")) {
+                    if (!statement.trim().isEmpty()) {
+                        try (Statement stmt = conn.createStatement()) {
+                            stmt.execute(statement.trim());
+                        }
+                    }
+                }
+
+                System.out.println("✅ schedule.sql 실행 완료");
+
             }
         } else {
             System.out.println("❌ ddl-auto가 create이 아님. data.sql 실행 생략");

@@ -598,7 +598,9 @@ public class ScheduleService {
     }
 
     public List<WorkTempResponseDto> createWorkTemp(ScheduleResult scheduleJson) {
+
         if (!scheduleJson.isSuccess()) {
+            System.out.println("🛑 스케줄 생성 실패 사유: \n" + scheduleJson.getFailureReason());
             throw new RuntimeException("유효하지 않은 근무입니다.");
         }
 

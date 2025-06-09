@@ -24,6 +24,8 @@ public class OrsResponseDto {
 
     private List<Long> nurseIds;
 
+    private List<String> nurseNames;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;

@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -231,6 +232,12 @@ public class CalenderService {
 
         List<OrsResponseDto> orsResponseDtos = surgeryScheduleRepository.findByRoomIdIn(roomIds).stream().map(s -> {
             List<Long> nurseIds = surgeryNurseRepository.findBySurgeryScheduleId(s.getId()).stream().map(sn -> sn.getNurse().getId()).collect(Collectors.toList());
+            List<String> nurseNames = nurseIds.stream()
+                    .map(nurseRepository::findById)
+                    .filter(Optional::isPresent)
+                    .map(opt -> opt.get().getName())
+                    .collect(Collectors.toList());
+
 
 //        List<OrsResponseDto> orsResponseDtos = surgeryScheduleRepository.findAll().stream().map(s -> {
 //                    List<Long> nurseIds = surgeryNurseRepository.findBySurgeryScheduleId(s.getId()).stream().map(sn -> sn.getNurse().getId()).collect(Collectors.toList());
@@ -240,6 +247,7 @@ public class CalenderService {
                             .roomId(s.getRoom().getId())
                             .content(s.getContent())
                             .nurseIds(nurseIds)
+                            .nurseNames(nurseNames)
                             .startTime(s.getStartTime())
                             .endTime(s.getEndTime())
                             .build();})

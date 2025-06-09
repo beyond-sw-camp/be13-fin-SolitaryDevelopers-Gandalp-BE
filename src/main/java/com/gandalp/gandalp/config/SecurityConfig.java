@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/join").hasRole("ADMIN")
 
                         // 나머지는 인증
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 );
 
         return http.build();

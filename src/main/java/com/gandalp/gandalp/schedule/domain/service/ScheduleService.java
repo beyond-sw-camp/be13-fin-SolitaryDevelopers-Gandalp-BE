@@ -441,7 +441,7 @@ public class ScheduleService {
         List<Nurse> nurse = nurseRepository.findByNameContaining(name);
         if(nurse.isEmpty()) throw new RuntimeException("간호사 조회 실패");
 
-        Page<ScheduleTemp> scheduleTempList = scheduleTempRepository.findAllNurseIn(nurse, pageable);
+        Page<ScheduleTemp> scheduleTempList = scheduleTempRepository.findAllByNurseIn(nurse, pageable);
 
         List<OffScheduleTempResponseDto> offScheduleResponseDtos = scheduleTempList.stream()
                 .map(temp -> {

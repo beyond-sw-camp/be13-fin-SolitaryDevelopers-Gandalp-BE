@@ -629,8 +629,13 @@ https://www.figma.com/design/ij3Ajyt45IiRekAAUzJx73/%EA%B0%84%EB%8B%AC%ED%94%84?
 ---
 
 ## 📝 9. 회고록
-프로젝트 진행 후기 및 배운 점
-
+|   이름	|  회고  	|
+|---	|---	|
+|   이덕찬 	|    |
+|   이창신 	|    |
+|   임현조 	|    |
+|   차경태 	|    |
+|   홍도현	|    |
 
 <br><br><br><br><br><br>
 <br><br><br><br><br><br>

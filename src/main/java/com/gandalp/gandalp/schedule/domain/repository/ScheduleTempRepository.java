@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public interface ScheduleTempRepository extends JpaRepository<ScheduleTemp, Long> {
 
-    Page<ScheduleTemp> findAllByNurseEmail(String email, Pageable pageable);
+    Page<ScheduleTemp> findAllByNurseEmailContaining(String email, Pageable pageable);
 
     Optional<ScheduleTemp> findById(Long schduleTempId);
 

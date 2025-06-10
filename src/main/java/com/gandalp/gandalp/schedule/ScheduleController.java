@@ -100,11 +100,6 @@ public class ScheduleController {
         Page<OffScheduleTempResponseDto> offScheduleTempResponseDtos = null;
         try {
             offScheduleTempResponseDtos = scheduleService.getOffScheduleTempByName(name, pageable);
-            // 페이징 없으면 hasMore=false 고정
-            Map<String, Object> response = Map.of(
-                    "items", offScheduleTempResponseDtos,
-                    "hasMore", false
-            );
             return ResponseEntity.ok().body(offScheduleTempResponseDtos);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

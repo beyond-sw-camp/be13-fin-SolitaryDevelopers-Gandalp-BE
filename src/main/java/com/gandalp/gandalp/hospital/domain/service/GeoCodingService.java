@@ -6,11 +6,14 @@ import com.gandalp.gandalp.hospital.domain.repository.HospitalGeoRedisRepository
 import com.gandalp.gandalp.hospital.domain.repository.HospitalRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GeoCodingService {
@@ -54,6 +57,16 @@ public class GeoCodingService {
             }
         }
         System.out.println("GeoCodingService: Redis에 위/경도 " + count + "건 저장");
+    }
+
+
+    // 매주 일요일 마다  redis에 저장
+    @Scheduled(cron = "0 0 0 * * SUN", zone = "Asia/Seoul")
+    @Transactional
+    public void scheduledConvertAllHospitalAddressToGeo() {
+        log.info("스케줄러: convertAllHospitalAddressToGeo 실행 시작");
+        convertAllHospitalAddressToGeo();
+        log.info("스케줄러: convertAllHospitalAddressToGeo 실행 완료");
     }
 }
 

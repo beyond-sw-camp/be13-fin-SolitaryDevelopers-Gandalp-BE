@@ -118,7 +118,7 @@ public class AuthController {
         try{
             tokenResponse = authService.refresh(request);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
 
         return ResponseEntity.ok(tokenResponse);

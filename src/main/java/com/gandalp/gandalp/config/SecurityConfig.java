@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new org.springframework.web.cors.CorsConfiguration();
-                    config.setAllowedOrigins(List.of("https://api.gandalp-service.com", "https://www.gandalp-service.com")); // 프론트엔드 주소
-//                    config.setAllowedOrigins(List.of("http://localhost:5173"));
+                    // config.setAllowedOrigins(List.of("https://api.gandalp-service.com", "https://www.gandalp-service.com")); // 프론트엔드 주소
+                   config.setAllowedOrigins(List.of("http://localhost:5173"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
@@ -67,14 +67,13 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Swagger, Health Check 허용
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/actuator/health").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/actuator/health", "/connect/**").permitAll()
 
                         // 로그인, 로그아웃, 리프레시 허용
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/logout", "/api/v1/auth/refresh").permitAll()
 
                         // 회원가입은 ADMIN만 허용
                         .requestMatchers("/api/v1/auth/join").hasRole("ADMIN")
-
                         // 나머지는 인증
                         .anyRequest().authenticated()
                 );

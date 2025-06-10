@@ -121,12 +121,13 @@ public class NoticeService {
 		// 2. 로그인한 유저의 과 정보 가져오기
 		Department department = loginMember.getDepartment();
 
+
 		// 3. 오늘 날짜 정보 가져오기
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime start = now.minusDays(3);
 
-		// 4. 긴급 공지사항 조회
-		List<Notice> allList = noticeRepository.findAllByCategory(NoticeCategory.URGENT);
+		// 4. 긴급 공지사항 조회 - 로그인한 유저의 해당 과의 카테고리만 조회 가능
+		List<Notice> allList = noticeRepository.findAllByDepartmentAndCategory(department, NoticeCategory.URGENT);
 
 
 		// 5. code label 해서 반환

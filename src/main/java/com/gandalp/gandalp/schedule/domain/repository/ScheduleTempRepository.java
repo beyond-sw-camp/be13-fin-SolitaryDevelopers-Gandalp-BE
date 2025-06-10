@@ -30,7 +30,7 @@ public interface ScheduleTempRepository extends JpaRepository<ScheduleTemp, Long
                                                     @Param("startTime") LocalDateTime startTime,
                                                     @Param("endTime") LocalDateTime endTime);
 
-    Page<ScheduleTemp> findAllNurseIn(List<Nurse> nurse, Pageable pageable);
+    Page<ScheduleTemp> findAllByNurseIn(List<Nurse> nurse, Pageable pageable);
 
     @Query("select s from ScheduleTemp s " +
             "where s.nurse IN :nurseList " +

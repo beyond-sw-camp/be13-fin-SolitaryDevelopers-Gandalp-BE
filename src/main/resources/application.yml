@@ -21,7 +21,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
   profiles:
-    active: secret
+    active: prod
 
   config:
     import: "optional:file:./application-secret.yml"

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public interface ScheduleTempRepository extends JpaRepository<ScheduleTemp, Long> {
 
-    Page<ScheduleTemp> findAllByNurseEmailContaining(String email, Pageable pageable);
+    Page<ScheduleTemp> findAllByNurseEmailContainingAndCategoryNot(String email, Pageable pageable, TempCategory category);
 
     Optional<ScheduleTemp> findById(Long schduleTempId);
 
@@ -30,7 +30,7 @@ public interface ScheduleTempRepository extends JpaRepository<ScheduleTemp, Long
                                                     @Param("startTime") LocalDateTime startTime,
                                                     @Param("endTime") LocalDateTime endTime);
 
-    Page<ScheduleTemp> findAllByNurseIn(List<Nurse> nurse, Pageable pageable);
+    Page<ScheduleTemp> findAllByNurseInAndCategoryNot(List<Nurse> nurse, Pageable pageable, TempCategory category);
 
     @Query("select s from ScheduleTemp s " +
             "where s.nurse IN :nurseList " +

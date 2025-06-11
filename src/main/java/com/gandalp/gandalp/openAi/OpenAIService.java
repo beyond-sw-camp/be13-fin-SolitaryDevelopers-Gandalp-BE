@@ -219,7 +219,7 @@ public class OpenAIService {
                 .append("12. 누적 근무 통계를 참고하여 간호사 타입별로 근무 수가 적은 간호사는 더 많이, 많은 간호사는 덜 배정하라.\n")
                 .append("13. 모든 출력은 날짜별로 day/evening/night 키를 포함한 JSON으로 하며, 반드시 쌍따옴표를 사용하고 주석을 포함하지 마.\n")
                 .append("14. 같은 간호사는 가능한 한 같은 시간대에 반복되지 않도록 교대로 분산 배정해야 한다.\n")
-                .append("    예를 들어 DAY 근무가 3일 연속 반복되지 않도록 하며, EVENING과 번갈아 배정하라.\n")
+                .append("    예를 들어 DAY 근무가 2일 연속 반복되지 않도록 하며, EVENING과 번갈아 배정하라.\n")
                 .append("15. 간호사 TYPE이 NURSE인 경우, DAY와 EVENING 근무를 가능한 한 번갈아가며 배정해야 한다.\n")
                 .append("    예를 들어, A 간호사가 DAY를 했다면 다음 근무는 EVENING으로 배정하고, 그 다음은 다시 DAY로 배정한다.\n")
                 .append("    간호사 개인별로 DAY-EVENING 근무가 균등하게 섞이도록 교차 배정하라.\n\n")

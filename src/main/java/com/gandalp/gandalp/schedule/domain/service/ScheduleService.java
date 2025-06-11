@@ -169,7 +169,7 @@ public class ScheduleService {
 
     public Page<OffScheduleTempResponseDto> getOffScheduleTemp(String email, Pageable pageable) {
         try {
-            Page<ScheduleTemp> scheduleTemps = scheduleTempRepository.findAllByNurseEmailContaining(email, pageable);
+            Page<ScheduleTemp> scheduleTemps = scheduleTempRepository.findAllByNurseEmailContainingAndCategoryNot(email, pageable, TempCategory.ACCEPTED_OFF);
 
             // 변환
             List<OffScheduleTempResponseDto> responseDtos = scheduleTemps.stream()
@@ -441,7 +441,7 @@ public class ScheduleService {
         List<Nurse> nurse = nurseRepository.findByNameContaining(name);
         if(nurse.isEmpty()) throw new RuntimeException("간호사 조회 실패");
 
-        Page<ScheduleTemp> scheduleTempList = scheduleTempRepository.findAllByNurseIn(nurse, pageable);
+        Page<ScheduleTemp> scheduleTempList = scheduleTempRepository.findAllByNurseInAndCategoryNot(nurse, pageable, TempCategory.ACCEPTED_OFF );
 
         List<OffScheduleTempResponseDto> offScheduleResponseDtos = scheduleTempList.stream()
                 .map(temp -> {
